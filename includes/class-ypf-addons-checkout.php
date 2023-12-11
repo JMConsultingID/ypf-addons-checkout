@@ -2,46 +2,76 @@
 
 class YPF_Addons_Checkout {
 
-    public function __construct() {
-        // Constructor code here.
+    /**
+     * Singleton instance.
+     */
+    private static $instance = null;
+
+    /**
+     * Get the instance of this class.
+     */
+    public static function instance() {
+        if ( null === self::$instance ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
-    public function run() {
-        add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
-        // Other hooks and filters.
+    /**
+     * Constructor.
+     */
+    private function __construct() {
+        add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
     }
 
-    public function add_plugin_admin_menu() {
+    /**
+     * Add settings page.
+     */
+    public function add_plugin_page() {
         add_menu_page(
-            'General Setting', // Page title
-            'YPF Addons', // Menu title
-            'manage_options', // Capability
-            'ypf-addons-checkout', // Menu slug
-            array($this, 'display_plugin_admin_page'), // Function
-            'dashicons-admin-generic', // Icon URL
-            6 // Position
+            'YPF Add-Ons Settings',       // Page title
+            'YPF Add-Ons',       // Menu title
+            'manage_options',           // Capability
+            'ypf-addons-checkout',      // Menu slug
+            array( $this, 'create_admin_page' ), // Callback function
+            'dashicons-admin-plugins',  // Icon
+            110                         // Position
         );
 
         add_submenu_page(
-            'ypf-addons-checkout', // Parent slug
-            'Add-Ons List', // Page title
-            'Add-Ons List', // Menu title
-            'manage_options', // Capability
-            'ypf-addons-list', // Menu slug
-            array($this, 'display_addons_list_page') // Function
+            'ypf-addons-checkout',      // Parent slug
+            'Add-Ons List',             // Page title
+            'Add-Ons List',             // Menu title
+            'manage_options',           // Capability
+            'ypf-addons-list',          // Menu slug
+            array( $this, 'add_ons_list_page' )  // Callback function
         );
     }
 
-    public function display_plugin_admin_page() {
-        // Include settings page view.
-        include_once 'class-ypf-addons-checkout-settings.php';
-        $settings_page = new YPF_Addons_Checkout_Settings();
-        $settings_page->options_page();
+    /**
+     * Admin settings page content.
+     */
+    public function create_admin_page() {
+        ?>
+        <div class="wrap">
+            <h1>YPF Addons Checkout Settings</h1>
+            <form method="post" action="options.php">
+                <?php
+                settings_fields( 'ypf_addons_group' );
+                do_settings_sections( 'ypf-addons-checkout' );
+                submit_button();
+                ?>
+            </form>
+        </div>
+        <?php
     }
 
-    public function display_addons_list_page() {
-        // Code for Add-Ons List page.
+    /**
+     * Add-Ons List Page.
+     */
+    public function add_ons_list_page() {
+        // Content for Add-Ons List page.
+        echo '<div class="wrap"><h1>Add-Ons List</h1></div>';
     }
-
-    // Other methods.
 }
+

@@ -1,21 +1,22 @@
 <?php
 /**
  * Plugin Name: YPF Addons Checkout
- * Description: Custom Elementor widget plugin for WooCommerce checkout add-ons.
+ * Description: Adds an additional fee at checkout in WooCommerce.
  * Version: 1.0.1
  * Author: Ardi
  */
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
-// Include the main class file.
-require_once plugin_dir_path(__FILE__) . 'includes/class-ypf-addons-checkout.php';
+// Define plugin paths and URLs.
+define( 'YPF_ADDONS_CHECKOUT_PATH', plugin_dir_path( __FILE__ ) );
+define( 'YPF_ADDONS_CHECKOUT_URL', plugin_dir_url( __FILE__ ) );
 
-function run_ypf_addons_checkout() {
-    $plugin = new YPF_Addons_Checkout();
-    $plugin->run();
-}
+// Include the main class.
+require_once YPF_ADDONS_CHECKOUT_PATH . 'includes/class-ypf-addons-checkout.php';
 
-run_ypf_addons_checkout();
+// Initialize the plugin.
+YPF_Addons_Checkout::instance();
