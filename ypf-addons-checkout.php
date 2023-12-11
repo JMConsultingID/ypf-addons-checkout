@@ -76,6 +76,7 @@ function ypf_addons_checkout_settings_page(){
 function ypf_addons_list_page(){
     global $wpdb;
 
+    // Handle form submission
     if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
         $addon_name = sanitize_text_field( $_POST['addon_name'] );
         $value_percentage = floatval( $_POST['value_percentage'] );
@@ -88,11 +89,16 @@ function ypf_addons_list_page(){
             )
         );
     }
-    
+
+    // Retrieve data from the database
+    $addons = $wpdb->get_results( "SELECT * FROM " . YPF_ADDONS_TABLE_NAME );
+
+    // HTML form
     ?>
     <div class="wrap">
         <h1>Add New Add-On</h1>
         <form method="post" action="">
+            <!-- Form Fields -->
             <table class="form-table">
                 <tr valign="top">
                     <th scope="row">Add-On Name:</th>
@@ -107,6 +113,27 @@ function ypf_addons_list_page(){
 
             <?php submit_button('Add Add-On'); ?>
         </form>
+        
+        <!-- Display Data in a Table -->
+        <h2>Existing Add-Ons</h2>
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Add-On Name</th>
+                    <th scope="col">Value (Percentage)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach( $addons as $addon ) : ?>
+                    <tr>
+                        <td><?php echo $addon->id; ?></td>
+                        <td><?php echo esc_html( $addon->addon_name ); ?></td>
+                        <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
     <?php
 }
