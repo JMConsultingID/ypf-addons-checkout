@@ -44,7 +44,7 @@ function ypf_addons_checkout_menu() {
         'ypf-addons-product-settings', 
         'ypf_addons_checkout_settings_page', 
         null, 
-        99 
+        25
     );
 
     add_submenu_page(
