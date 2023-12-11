@@ -1,96 +1,71 @@
 <?php
 /**
  * Plugin Name: YPF Addons Checkout
- * Description: WooCommerce custom checkout add-ons.
- * Version: 1.0
- * Author: Your Name
+ * Plugin URI: https://example.com/ypf-addons-checkout/
+ * Description: Adds custom add-ons fees and calculations to WooCommerce checkout using Elementor widgets.
+ * Version: 1.0.1
+ * Author: Ardi
+ * Author URI: https://example.com/
+ * License: GPLv2 or later
+ * Text Domain: ypf-addons-checkout
  */
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+// Include required files
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-ypf-addons-checkout.php';
+
+// Register plugin settings page
+add_action( 'admin_menu', 'ypf_addons_checkout_settings_page' );
+
+function ypf_addons_checkout_settings_page() {
+  add_menu_page(
+    'YPF Addons Settings',
+    'YPF Addons',
+    'manage_options',
+    'ypf_addons_checkout_settings',
+    'ypf_addons_checkout_settings_page',
+    'dashicons-cart',
+    56
+  );
+  
+  // Add submenu for add-ons list
+  add_submenu_page(
+    'ypf_addons_checkout_settings',
+    'Add-Ons List',
+    'Add-Ons List',
+    'manage_options',
+    'ypf_addons_checkout_add_ons_list',
+    'ypf_addons_checkout_add_ons_list_page'
+  );
 }
 
-if (!class_exists('YPF_Addons_Checkout')) {
+// Render plugin settings page
+function ypf_addons_checkout_settings_page() {
+  ?>
+  <div class="wrap">
+    <h1>YPF Addons Checkout Settings</h1>
+    <form method="post" action="options.php">
+      <?php settings_fields( 'ypf_addons_checkout_settings_group' ); ?>
+      <?php do_settings_sections( 'ypf_addons_checkout_settings_page' ); ?>
+      <table class="form-table">
+        <tbody>
+          <tr>
+            <th scope="row">Enable Add-Ons</th>
+            <td>
+              <input type="checkbox" name="ypf_addons_checkout_enable_addons" value="1" <?php checked( get_option( 'ypf_addons_checkout_enable_addons', 1 ), 1 ); ?>>
+              <label for="ypf_addons_checkout_enable_addons">Enable add-ons functionality.</label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <?php submit_button(); ?>
+    </form>
+  </div>
+  <?php
+}
 
-    class YPF_Addons_Checkout {
+// Register settings
+add_action( 'admin_init', 'ypf_addons_checkout_register_settings' );
 
-        private static $instance;
-
-        private function __construct() {
-            // Add hooks and filters here.
-            add_action('admin_menu', array($this, 'add_admin_menu'));
-            add_action('admin_init', array($this, 'settings'));
-        }
-
-        public static function get_instance() {
-            if (null == self::$instance) {
-                self::$instance = new self;
-            }
-            return self::$instance;
-        }
-
-        public function add_admin_menu() {
-            add_menu_page(
-                'YPF Addons Checkout',
-                'YPF Addons Checkout',
-                'manage_options',
-                'ypf-addons-checkout',
-                array($this, 'settings_page'),
-                'dashicons-cart',
-                26
-            );
-        }
-
-        public function settings_page() {
-            ?>
-            <div class="wrap">
-                <h2>YPF Addons Checkout Settings</h2>
-                <form method="post" action="options.php">
-                    <?php
-                    settings_fields('ypf_addons_checkout_options');
-                    do_settings_sections('ypf-addons-checkout');
-                    submit_button();
-                    ?>
-                </form>
-            </div>
-            <?php
-        }
-
-        public function settings() {
-            register_setting('ypf_addons_checkout_options', 'ypf_addons_checkout_enable');
-
-            add_settings_section(
-                'ypf_addons_checkout_section',
-                'General Settings',
-                array($this, 'section_callback'),
-                'ypf-addons-checkout'
-            );
-
-            add_settings_field(
-                'ypf_addons_checkout_enable',
-                'Enable YPF Addons Checkout',
-                array($this, 'enable_callback'),
-                'ypf-addons-checkout',
-                'ypf_addons_checkout_section'
-            );
-        }
-
-        public function section_callback() {
-            echo 'Enable or disable YPF Addons Checkout';
-        }
-
-        public function enable_callback() {
-            $enable = get_option('ypf_addons_checkout_enable');
-            ?>
-            <label for="ypf_addons_checkout_enable">
-                <input type="checkbox" name="ypf_addons_checkout_enable" id="ypf_addons_checkout_enable" <?php checked(1, $enable, true); ?>>
-                Enable YPF Addons Checkout
-            </label>
-            <?php
-        }
-
-    }
-
-    // Instantiate the class.
-    YPF_Addons_Checkout::get_instance();
+function ypf_addons_checkout_register_settings() {
+  register_setting( 'ypf_addons_checkout_settings_group', 'ypf_addons_checkout_enable_addons' );
 }
