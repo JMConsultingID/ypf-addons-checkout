@@ -55,41 +55,41 @@ if (!class_exists('YPF_Addons_Checkout')) {
             </div>
             <?php
         }
+
+        public function settings() {
+            register_setting('ypf_addons_checkout_options', 'ypf_addons_checkout_enable');
+
+            add_settings_section(
+                'ypf_addons_checkout_section',
+                'General Settings',
+                array($this, 'section_callback'),
+                'ypf-addons-checkout'
+            );
+
+            add_settings_field(
+                'ypf_addons_checkout_enable',
+                'Enable YPF Addons Checkout',
+                array($this, 'enable_callback'),
+                'ypf-addons-checkout',
+                'ypf_addons_checkout_section'
+            );
+        }
+
+        public function section_callback() {
+            echo 'Enable or disable YPF Addons Checkout';
+        }
+
+        public function enable_callback() {
+            $enable = get_option('ypf_addons_checkout_enable');
+            ?>
+            <label for="ypf_addons_checkout_enable">
+                <input type="checkbox" name="ypf_addons_checkout_enable" id="ypf_addons_checkout_enable" <?php checked(1, $enable, true); ?>>
+                Enable YPF Addons Checkout
+            </label>
+            <?php
+        }
+
     }
-
-    public function settings() {
-        register_setting('ypf_addons_checkout_options', 'ypf_addons_checkout_enable');
-
-        add_settings_section(
-            'ypf_addons_checkout_section',
-            'General Settings',
-            array($this, 'section_callback'),
-            'ypf-addons-checkout'
-        );
-
-        add_settings_field(
-            'ypf_addons_checkout_enable',
-            'Enable YPF Addons Checkout',
-            array($this, 'enable_callback'),
-            'ypf-addons-checkout',
-            'ypf_addons_checkout_section'
-        );
-    }
-
-    public function section_callback() {
-        echo 'Enable or disable YPF Addons Checkout';
-    }
-
-    public function enable_callback() {
-        $enable = get_option('ypf_addons_checkout_enable');
-        ?>
-        <label for="ypf_addons_checkout_enable">
-            <input type="checkbox" name="ypf_addons_checkout_enable" id="ypf_addons_checkout_enable" <?php checked(1, $enable, true); ?>>
-            Enable YPF Addons Checkout
-        </label>
-        <?php
-    }
-
 
     // Instantiate the class.
     YPF_Addons_Checkout::get_instance();
