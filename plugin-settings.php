@@ -1,14 +1,4 @@
 <?php
-/**
- * Plugin Name: YPF Add-ons Checkout
- * Plugin URI: https://yourpropfirm.com/
- * Description: Add custom add-ons and fees to your WooCommerce checkout.
- * Author: Ardi
- * Version: 1.0.1
- * License: GPLv2 or later
- * Text Domain: ypf-addons-checkout
- */
-
 // Admin menu for plugin settings
 add_action( 'admin_menu', 'ypf_addons_checkout_settings_menu' );
 
