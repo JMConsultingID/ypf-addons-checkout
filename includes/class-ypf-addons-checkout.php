@@ -13,8 +13,8 @@ class YPF_Addons_Checkout {
 
     public function add_plugin_admin_menu() {
         add_menu_page(
-            'YPF Addons Product', // Page title
-            'YPF Addons Product', // Menu title
+            'General Setting', // Page title
+            'YPF Addons', // Menu title
             'manage_options', // Capability
             'ypf-addons-checkout', // Menu slug
             array($this, 'display_plugin_admin_page'), // Function
