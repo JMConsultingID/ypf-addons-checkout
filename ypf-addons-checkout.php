@@ -57,7 +57,7 @@ function ypf_addons_checkout_menu() {
     );
 
     add_submenu_page(
-        'ypf-addons-rules-settings',
+        'ypf-addons-product-settings',
         'Add-Ons Rule',
         'Add-Ons Rule',
         'manage_options',
