@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Include the main class file.
-require_once plugin_dir_path(__FILE__) . 'include/class-ypf-addons-checkout.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-ypf-addons-checkout.php';
 
 function run_ypf_addons_checkout() {
     $plugin = new YPF_Addons_Checkout();
