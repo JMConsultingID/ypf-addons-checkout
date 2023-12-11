@@ -106,6 +106,19 @@ class YPF_Addons_Checkout_Settings {
 
     // Callbacks for add-on fields go here
 
+    public function list_addons() {
+        // Fetch add-ons from the database
+        // Output them in a table similar to the one in your screenshot
+    }
+
+    // Add-on form handling (you would likely handle this elsewhere, such as in a form processing hook)
+    public function process_addon_form() {
+        if (isset($_POST['new_addon_name'], $_POST['new_addon_percentage'])) {
+            // Sanitize, validate and process form data
+            // Insert new add-on into database
+        }
+    }
+
 }
 
 // If you're planning to submit the form data, you'll need to add appropriate form handling logic.
