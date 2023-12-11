@@ -55,6 +55,15 @@ function ypf_addons_checkout_menu() {
         'ypf-addons-list',
         'ypf_addons_list_page'
     );
+
+    add_submenu_page(
+        'ypf-addons-rules-settings',
+        'Add-Ons Rule',
+        'Add-Ons Rule',
+        'manage_options',
+        'ypf-addons-rule',
+        'ypf_addons_rule_page'
+    );
 }
 
 function ypf_addons_checkout_settings_page(){
@@ -71,6 +80,10 @@ function ypf_addons_checkout_settings_page(){
         </form>
     </div>
     <?php
+}
+
+function ypf_addons_rule_page(){
+
 }
 
 function ypf_addons_list_page(){
@@ -115,7 +128,7 @@ function ypf_addons_list_page(){
         </form>
         
         <!-- Display Data in a Table -->
-        <h2>Existing Add-Ons</h2>
+        <h2>Add-Ons List</h2>
         <table class="wp-list-table widefat fixed striped">
             <thead>
                 <tr>
