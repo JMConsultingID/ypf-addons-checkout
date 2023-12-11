@@ -96,7 +96,7 @@ function ypf_addons_list_page(){
     // HTML form
     ?>
     <div class="wrap">
-        <h1>Add New Add-On</h1>
+        <h1>Add New Add-On Fee</h1>
         <form method="post" action="">
             <!-- Form Fields -->
             <table class="form-table">
