@@ -10,62 +10,79 @@
  * Text Domain: ypf-addons-checkout
  */
 
-// Include required files
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-ypf-addons-checkout.php';
-
-// Register plugin settings page
-add_action( 'admin_menu', 'ypf_addons_checkout_settings_page' );
-
-function ypf_addons_checkout_settings_page() {
-  add_menu_page(
-    'YPF Addons Settings',
-    'YPF Addons',
-    'manage_options',
-    'ypf_addons_checkout_settings',
-    'ypf_addons_checkout_settings_page',
-    'dashicons-cart',
-    56
-  );
-  
-  // Add submenu for add-ons list
-  add_submenu_page(
-    'ypf_addons_checkout_settings',
-    'Add-Ons List',
-    'Add-Ons List',
-    'manage_options',
-    'ypf_addons_checkout_add_ons_list',
-    'ypf_addons_checkout_add_ons_list_page'
-  );
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly.
 }
 
-// Render plugin settings page
-function ypf_addons_checkout_settings_page() {
-  ?>
-  <div class="wrap">
-    <h1>YPF Addons Checkout Settings</h1>
-    <form method="post" action="options.php">
-      <?php settings_fields( 'ypf_addons_checkout_settings_group' ); ?>
-      <?php do_settings_sections( 'ypf_addons_checkout_settings_page' ); ?>
-      <table class="form-table">
-        <tbody>
-          <tr>
-            <th scope="row">Enable Add-Ons</th>
-            <td>
-              <input type="checkbox" name="ypf_addons_checkout_enable_addons" value="1" <?php checked( get_option( 'ypf_addons_checkout_enable_addons', 1 ), 1 ); ?>>
-              <label for="ypf_addons_checkout_enable_addons">Enable add-ons functionality.</label>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <?php submit_button(); ?>
-    </form>
-  </div>
-  <?php
+add_action( 'admin_menu', 'ypf_addons_checkout_menu' );
+
+function ypf_addons_checkout_menu() {
+    add_menu_page( 
+        'YPF Addons Product', 
+        'YPF Addons Product', 
+        'manage_options', 
+        'ypf-addons-product-settings', 
+        'ypf_addons_checkout_settings_page', 
+        null, 
+        99 
+    );
+
+    add_submenu_page(
+        'ypf-addons-product-settings',
+        'Add-Ons List',
+        'Add-Ons List',
+        'manage_options',
+        'ypf-addons-list',
+        'ypf_addons_list_page'
+    );
 }
 
-// Register settings
-add_action( 'admin_init', 'ypf_addons_checkout_register_settings' );
+function ypf_addons_checkout_settings_page(){
+    ?>
+    <!-- HTML for settings page -->
+    <div class="wrap">
+        <h1>YPF Addons Checkout Settings</h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields( 'ypf-addons-checkout-settings' );
+            do_settings_sections( 'ypf-addons-checkout-settings' );
+            submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
 
-function ypf_addons_checkout_register_settings() {
-  register_setting( 'ypf_addons_checkout_settings_group', 'ypf_addons_checkout_enable_addons' );
+function ypf_addons_list_page(){
+    // Add your content for the Add-Ons List page here
+}
+
+add_action( 'admin_init', 'ypf_addons_checkout_settings_init' );
+
+function ypf_addons_checkout_settings_init() {
+    register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_enabled' );
+
+    add_settings_section(
+        'ypf_addons_checkout_settings_section',
+        'YPF Addons Checkout Settings',
+        'ypf_addons_checkout_settings_section_cb',
+        'ypf-addons-checkout-settings'
+    );
+
+    add_settings_field(
+        'ypf_addons_checkout_enable',
+        'Enable YPF Addons Checkout',
+        'ypf_addons_checkout_enable_cb',
+        'ypf-addons-checkout-settings',
+        'ypf_addons_checkout_settings_section'
+    );
+}
+
+function ypf_addons_checkout_settings_section_cb() {
+    echo '<p>Enable or Disable the YPF Addons Checkout.</p>';
+}
+
+function ypf_addons_checkout_enable_cb() {
+    $option = get_option( 'ypf_addons_checkout_enabled' );
+    echo '<input type="checkbox" id="ypf_addons_checkout_enabled" name="ypf_addons_checkout_enabled" value="1" ' . checked( 1, $option, false ) . '/>';
 }
