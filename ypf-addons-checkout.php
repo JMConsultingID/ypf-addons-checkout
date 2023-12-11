@@ -3,8 +3,7 @@
 Plugin Name: YPF Addons Checkout
 Description: A plugin to create add-ons fee and calculation on the WooCommerce checkout, with Elementor widget support.
 Version: 1.0.1
-License: GPLv2 or later
-Text Domain: ypf-addons-checkout
+Author: Ardi
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -50,31 +49,13 @@ class YPF_Addons_Checkout {
 
     // Setup settings
     public function setup_settings() {
-        register_setting( 'ypf-addons-checkout-options', 'ypf_addons_checkout_settings' );
+        register_setting( 'ypf-addons-checkout-options', 'ypf_addons_checkout_enabled' );
 
         add_settings_section(
             'ypf_addons_checkout_section',
-            'Settings',
+            'Enable/Disable Plugin',
             null,
             'ypf-addons-checkout'
-        );
-
-        add_settings_field(
-            'ypf_addons_checkout_title', 
-            'Title', 
-            array( $this, 'text_field_callback' ), 
-            'ypf-addons-checkout', 
-            'ypf_addons_checkout_section',
-            array( 'label_for' => 'ypf_addons_checkout_title' )
-        );
-
-        add_settings_field(
-            'ypf_addons_checkout_description', 
-            'Description', 
-            array( $this, 'textarea_field_callback' ), 
-            'ypf-addons-checkout', 
-            'ypf_addons_checkout_section',
-            array( 'label_for' => 'ypf_addons_checkout_description' )
         );
 
         add_settings_field(
@@ -87,28 +68,11 @@ class YPF_Addons_Checkout {
         );
     }
 
-    // Text field callback
-    public function text_field_callback( $args ) {
-        $options = get_option( 'ypf_addons_checkout_settings' );
-        $field = $args['label_for'];
-        $value = isset( $options[$field] ) ? esc_attr( $options[$field] ) : '';
-        echo "<input type='text' id='$field' name='ypf_addons_checkout_settings[$field]' value='$value' />";
-    }
-
-    // Textarea field callback
-    public function textarea_field_callback( $args ) {
-        $options = get_option( 'ypf_addons_checkout_settings' );
-        $field = $args['label_for'];
-        $value = isset( $options[$field] ) ? esc_textarea( $options[$field] ) : '';
-        echo "<textarea id='$field' name='ypf_addons_checkout_settings[$field]'>$value</textarea>";
-    }
-
     // Checkbox field callback
-    public function checkbox_field_callback( $args ) {
-        $options = get_option( 'ypf_addons_checkout_settings' );
-        $field = $args['label_for'];
-        $checked = isset( $options[$field] ) ? checked( $options[$field], 1, false ) : '';
-        echo "<input type='checkbox' id='$field' name='ypf_addons_checkout_settings[$field]' value='1' $checked />";
+    public function checkbox_field_callback() {
+        $enabled = get_option( 'ypf_addons_checkout_enabled' );
+        $checked = isset( $enabled ) ? checked( $enabled, '1', false ) : '';
+        echo "<input type='checkbox' id='ypf_addons_checkout_enabled' name='ypf_addons_checkout_enabled' value='1' $checked />";
     }
 }
 
