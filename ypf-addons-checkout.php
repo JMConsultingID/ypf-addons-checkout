@@ -15,7 +15,7 @@ if ( ! in_array( 'woocommerce/woocommerce.php', get_option( 'active_plugins' ) )
 }
 
 // Include plugin files
-require_once( 'includes/class-ypf-addons-checkout.php' );
+// require_once( 'includes/class-ypf-addons-checkout.php' );
 require_once( 'plugin-settings.php' ); // Include settings file
 
 // Register activation and deactivation hooks
