@@ -14,6 +14,26 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+global $wpdb;
+define( 'YPF_ADDONS_TABLE_NAME', $wpdb->prefix . 'ypf_addons' );
+
+register_activation_hook( __FILE__, 'ypf_addons_create_table' );
+
+function ypf_addons_create_table() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE " . YPF_ADDONS_TABLE_NAME . " (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        addon_name varchar(255) NOT NULL,
+        value_percentage decimal(5,2) NOT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+}
+
 add_action( 'admin_menu', 'ypf_addons_checkout_menu' );
 
 function ypf_addons_checkout_menu() {
@@ -54,7 +74,41 @@ function ypf_addons_checkout_settings_page(){
 }
 
 function ypf_addons_list_page(){
-    // Add your content for the Add-Ons List page here
+    global $wpdb;
+
+    if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+        $addon_name = sanitize_text_field( $_POST['addon_name'] );
+        $value_percentage = floatval( $_POST['value_percentage'] );
+
+        $wpdb->insert(
+            YPF_ADDONS_TABLE_NAME,
+            array(
+                'addon_name' => $addon_name,
+                'value_percentage' => $value_percentage
+            )
+        );
+    }
+    
+    ?>
+    <div class="wrap">
+        <h1>Add New Add-On</h1>
+        <form method="post" action="">
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Add-On Name:</th>
+                    <td><input type="text" name="addon_name" value="" /></td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Value (Percentage):</th>
+                    <td><input type="text" name="value_percentage" value="" /></td>
+                </tr>
+            </table>
+
+            <?php submit_button('Add Add-On'); ?>
+        </form>
+    </div>
+    <?php
 }
 
 add_action( 'admin_init', 'ypf_addons_checkout_settings_init' );
