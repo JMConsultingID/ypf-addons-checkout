@@ -20,6 +20,16 @@ class YPF_Addons_Checkout_Settings {
             'dashicons-admin-generic', // Icon URL
             25 // Position
         );
+
+        // Submenu page for Add-ons
+        add_submenu_page(
+            'ypf-addons-checkout', // Parent slug
+            'Add-ons', // Page title
+            'Add-ons', // Menu title
+            'manage_options', // Capability
+            'ypf-addons-checkout-addons', // Menu slug
+            array( $this, 'addons_page_content' ) // Callback function
+        );
     }
 
     public function create_admin_page() {
@@ -33,6 +43,23 @@ class YPF_Addons_Checkout_Settings {
                 submit_button();
             ?>
             </form>
+        </div>
+        <?php
+    }
+
+    public function addons_page_content() {
+        ?>
+        <div class="wrap">
+            <h2>Add-ons</h2>
+            <form method="post" action="options.php">
+                <?php
+                settings_fields( 'ypf_addons_checkout_addons_group' );
+                do_settings_sections( 'ypf-addons-checkout-addons' );
+                submit_button('Add Add-on');
+                ?>
+            </form>
+            <h2>Existing Add-ons</h2>
+            <?php $this->list_addons(); // Method to list all addons in a table ?>
         </div>
         <?php
     }
