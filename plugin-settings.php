@@ -1,93 +1,142 @@
 <?php
-// Admin menu for plugin settings
-add_action( 'admin_menu', 'ypf_addons_checkout_settings_menu' );
+if ( ! class_exists( 'YPF_Addons_Checkout_Settings' ) ) {
+    class YPF_Addons_Checkout_Settings {
+        // Constructor
+        public function __construct() {
+            add_action( 'admin_menu', array( $this, 'create_settings_page' ) );
+            add_action( 'admin_init', array( $this, 'setup_settings' ) );
+        }
 
-function ypf_addons_checkout_settings_menu() {
-    add_submenu_page(
-        'woocommerce',
-        __( 'YPF Add-ons Checkout', 'ypf-addons-checkout' ),
-        __( 'Settings', 'ypf-addons-checkout' ),
-        'manage_options',
-        'ypf-addons-checkout-settings',
-        'ypf_addons_checkout_settings_page'
-    );
+        // Create settings page
+        public function create_settings_page() {
+            add_menu_page(
+                'YPF Addons Checkout Settings',
+                'YPF Addons Checkout',
+                'manage_options',
+                'ypf-addons-checkout',
+                array( $this, 'settings_page_content' ),
+                'dashicons-admin-generic',
+                65
+            );
+        }
+
+        // Settings page content
+        public function settings_page_content() {
+            ?>
+            <div class="wrap">
+                <h1>YPF Addons Checkout Settings</h1>
+                <?php
+                // Show the "Add New Add-on" form
+                ypf_addons_checkout_addon_form();
+
+                // Settings form
+                ?>
+                <form method="post" action="options.php">
+                    <?php
+                    settings_fields('ypf-addons-checkout-options');
+                    do_settings_sections('ypf-addons-checkout');
+                    submit_button();
+                    ?>
+                </form>
+            </div>
+            <?php
+        }
+
+        // Setup settings
+        public function setup_settings() {
+            register_setting( 'ypf-addons-checkout-options', 'ypf_addons_checkout_enabled' );
+
+            add_settings_section(
+                'ypf_addons_checkout_section',
+                'Enable/Disable Plugin',
+                null,
+                'ypf-addons-checkout'
+            );
+
+            add_settings_field(
+                'ypf_addons_checkout_enabled', 
+                'Enable Plugin', 
+                array( $this, 'checkbox_field_callback' ), 
+                'ypf-addons-checkout', 
+                'ypf_addons_checkout_section',
+                array( 'label_for' => 'ypf_addons_checkout_enabled' )
+            );
+        }
+
+        // Checkbox field callback
+        public function checkbox_field_callback() {
+            $enabled = get_option( 'ypf_addons_checkout_enabled' );
+            $checked = isset( $enabled ) ? checked( $enabled, '1', false ) : '';
+            echo "<input type='checkbox' id='ypf_addons_checkout_enabled' name='ypf_addons_checkout_enabled' value='1' $checked />";
+        }
+    }
 }
 
-// Plugin settings page content
-function ypf_addons_checkout_settings_page() {
-    echo '<div class="wrap">';
-    echo '<h1>' . __( 'YPF Add-ons Checkout Settings', 'ypf-addons-checkout' ) . '</h1>';
+// Function to create the database table for addon fees
+function ypf_addons_checkout_create_db_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'ypf_addons_checkout';
 
-    // Title and Description fields
-    echo '<form method="post">';
-    settings_fields( 'ypf_addons_checkout_settings_group' );
-    do_settings_sections( 'ypf-addons-checkout-settings' );
-    echo '</form>';
+    $charset_collate = $wpdb->get_charset_collate();
 
-    echo '</div>';
+    $sql = "CREATE TABLE $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        addon_name varchar(255) NOT NULL,
+        percentage decimal(5,2) NOT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
 }
 
-// Register settings and fields
-add_action( 'admin_init', 'ypf_addons_checkout_register_settings' );
+// Function to handle the form submission for saving a new add-on
+function ypf_addons_checkout_save_addon() {
+    // Check for nonce for security
+    check_admin_referer('ypf_addons_checkout_add');
 
-function ypf_addons_checkout_register_settings() {
-    register_setting(
-        'ypf_addons_checkout_settings_group',
-        'ypf_addons_checkout_settings'
+    // Process and sanitize the input data
+    $addon_name = sanitize_text_field($_POST['addon_name']);
+    $percentage = sanitize_text_field($_POST['percentage']);
+
+    // Insert the new add-on into the database
+    global $wpdb;
+    $wpdb->insert(
+        $wpdb->prefix . 'ypf_addons_checkout',
+        array(
+            'addon_name' => $addon_name,
+            'percentage' => $percentage,
+        ),
+        array(
+            '%s',
+            '%f',
+        )
     );
 
-    add_settings_section(
-        'ypf_addons_checkout_general_section',
-        __( 'General Settings', 'ypf-addons-checkout' ),
-        'ypf_addons_checkout_general_section_callback',
-        'ypf-addons-checkout-settings'
-    );
-
-    add_settings_field(
-        'ypf_addons_checkout_title',
-        __( 'Plugin Title', 'ypf-addons-checkout' ),
-        'ypf_addons_checkout_title_field',
-        'ypf-addons-checkout-settings',
-        'ypf_addons_checkout_general_section'
-    );
-
-    add_settings_field(
-        'ypf_addons_checkout_description',
-        __( 'Plugin Description', 'ypf-addons-checkout' ),
-        'ypf_addons_checkout_description_field',
-        'ypf-addons-checkout-settings',
-        'ypf_addons_checkout_general_section'
-    );
-
-    add_settings_field(
-        'ypf_addons_checkout_enable',
-        __( 'Enable Plugin', 'ypf-addons-checkout' ),
-        'ypf_addons_checkout_enable_field',
-        'ypf-addons-checkout-settings',
-        'ypf_addons_checkout_general_section'
-    );
+    // Redirect back to the settings page with a success message
+    wp_redirect(add_query_arg('ypf_addons_checkout_message', 'addon_added', menu_page_url('ypf-addons-checkout', false)));
+    exit;
 }
+// Function to display the add-on form
+function ypf_addons_checkout_addon_form() {
+    ?>
+    <h2>Add New Add-on</h2>
+    <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+        <input type="hidden" name="action" value="ypf_addons_checkout_save">
+        <?php wp_nonce_field('ypf_addons_checkout_add'); ?>
 
+        <table class="form-table">
+            <tr>
+                <th scope="row"><label for="addon_name">Add-on Name</label></th>
+                <td><input name="addon_name" id="addon_name" type="text" required></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="percentage">Value (Percentage)</label></th>
+                <td><input name="percentage" id="percentage" type="text" required></td>
+            </tr>
+        </table>
 
-// Callback functions for settings sections and fields
-function ypf_addons_checkout_general_section_callback() {
-    echo '<p>' . __( 'Configure your YPF Add-ons Checkout settings.', 'ypf-addons-checkout' ) . '</p>';
-}
-
-function ypf_addons_checkout_title_field() {
-    $options = get_option( 'ypf_addons_checkout_settings' );
-    $title = $options['ypf_addons_checkout_title'];
-    echo '<input type="text" name="ypf_addons_checkout_settings[ypf_addons_checkout_title]" value="' . esc_attr( $title ) . '" class="regular-text" />';
-}
-
-function ypf_addons_checkout_description_field() {
-    $options = get_option( 'ypf_addons_checkout_settings' );
-    $description = $options['ypf_addons_checkout_description'];
-    echo '<textarea name="ypf_addons_checkout_settings[ypf_addons_checkout_description]" class="large-text" rows="5">' . esc_attr( $description ) . '</textarea>';
-}
-
-function ypf_addons_checkout_enable_field() {
-    $options = get_option( 'ypf_addons_checkout_settings' );
-    $enabled = $options['ypf_addons_checkout_enable'];
-    echo '<input type="checkbox" name="ypf_addons_checkout_settings[ypf_addons_checkout_enable]" ' . checked( 1, $enabled, false ) . ' />';
+        <?php submit_button('Add Add-on'); ?>
+    </form>
+    <?php
 }
