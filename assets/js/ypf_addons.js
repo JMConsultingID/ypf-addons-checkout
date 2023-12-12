@@ -1,19 +1,30 @@
 jQuery(document).ready(function($) {
-    $('input[name="ypf_addon"]').on('change', function() {
-        var addonId = $(this).val(); // Get the selected add-on ID
-        var addonPercentage = $(this).data('value'); // Assume you have data-percentage attribute in your radio buttons
-        
-        // AJAX request to update session with the selected add-on
+    // Store the last selected radio button
+    var lastChecked = null;
+
+    $('input[type="radio"][name="ypf_addon"]').on('click', function() {
+        if (this === lastChecked) {
+            $(this).prop('checked', false);
+            lastChecked = null;
+        } else {
+            lastChecked = this;
+        }
+
+        var addonId = $(this).is(':checked') ? $(this).val() : '';
+        var addonPercentage = $(this).is(':checked') ? $(this).data('percentage') : 0;
+
+        // AJAX request to update session with the selected add-on or remove it
         $.ajax({
             type: 'POST',
             url: ypf_addons_ajax.ajax_url,
             data: {
                 action: 'update_selected_addon',
                 addon_id: addonId,
-                addon_percentage: addonPercentage
+                addon_percentage: addonPercentage,
+                nonce: ypf_addons_ajax.nonce
             },
             success: function(response) {
-                // You may want to trigger an update in the checkout totals
+                // Trigger an update in the checkout totals
                 $(document.body).trigger('update_checkout');
             }
         });

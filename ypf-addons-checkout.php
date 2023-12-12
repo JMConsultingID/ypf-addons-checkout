@@ -243,8 +243,11 @@ function ypf_addons_checkout_enable_cb() {
 }
 
 function ypf_addons_enqueue_scripts() {
-    wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'assets/js/ypf_addons.js', array('jquery'), null, true);
-    wp_localize_script('ypf-addons-script', 'ypf_addons_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+    wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'js/ypf-addons.js', array('jquery'), null, true);
+    wp_localize_script('ypf-addons-script', 'ypf_addons_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('ypf_addons_nonce') // Nonce for security
+    ));
 }
 add_action('wp_enqueue_scripts', 'ypf_addons_enqueue_scripts');
 
@@ -253,9 +256,13 @@ add_action('wp_ajax_update_selected_addon', 'ypf_addons_update_selected_addon');
 add_action('wp_ajax_nopriv_update_selected_addon', 'ypf_addons_update_selected_addon'); // If needed for non-logged in users
 
 function ypf_addons_update_selected_addon() {
-    if (isset($_POST['addon_id']) && isset($_POST['addon_percentage'])) {
-        WC()->session->set('chosen_addon', sanitize_text_field($_POST['addon_id']));
-        WC()->session->set('chosen_addon_percentage', floatval($_POST['addon_percentage']));
-    }
-    wp_send_json_success(); // Send a success response back to the AJAX script
+    check_ajax_referer('ypf_addons_nonce', 'nonce'); // Security check
+
+    $addon_id = isset($_POST['addon_id']) ? sanitize_text_field($_POST['addon_id']) : '';
+    $addon_percentage = isset($_POST['addon_percentage']) ? floatval($_POST['addon_percentage']) : 0;
+
+    WC()->session->set('chosen_addon', $addon_id);
+    WC()->session->set('chosen_addon_percentage', $addon_percentage);
+
+    wp_send_json_success();
 }
