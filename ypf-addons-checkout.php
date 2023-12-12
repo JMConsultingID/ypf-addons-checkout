@@ -243,7 +243,7 @@ function ypf_addons_checkout_enable_cb() {
 }
 
 function ypf_addons_enqueue_scripts() {
-    wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'js/ypf-addons.js', array('jquery'), null, true);
+    wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'assets/js/ypf_addons.js', array('jquery'), null, true);
     wp_localize_script('ypf-addons-script', 'ypf_addons_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('ypf_addons_nonce') // Nonce for security
