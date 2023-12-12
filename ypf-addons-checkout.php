@@ -148,19 +148,21 @@ function ypf_addons_list_page(){
     <div class="wrap">
         <h1><?php echo $edit ? 'Edit' : 'Add New'; ?> Add-On</h1>
         <form method="post" action="">
-            <table class="form-table" style="border-collapse: collapse;">
+            <table class="form-table" style="border-collapse: collapse; width: 100%;">
                 <tr>
-                    <td style="padding: 10px; border: none;"><label for="addon_name">Add-On Name:</label></td>
-                    <td style="padding: 10px; border: none;"><input type="text" id="addon_name" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" /></td>
-                </tr>
-
-                <tr>
-                    <td style="padding: 10px; border: none;"><label for="value_percentage">Value (Percentage):</label></td>
-                    <td style="padding: 10px; border: none;"><input type="text" id="value_percentage" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" /></td>
+                    <td style="padding: 10px; border: none;">
+                        <label for="addon_name">Add-On Name:</label><br>
+                        <input type="text" id="addon_name" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" />
+                    </td>
+                    <td style="padding: 10px; border: none;">
+                        <label for="value_percentage">Value (Percentage):</label><br>
+                        <input type="text" id="value_percentage" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" />
+                    </td>
+                    <td style="padding: 10px; border: none;">
+                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
+                    </td>
                 </tr>
             </table>
-
-            <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On'); ?>
         </form>
         
         <!-- Display Data in a Table -->
