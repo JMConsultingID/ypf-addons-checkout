@@ -148,8 +148,31 @@ function ypf_addons_list_page(){
             <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On'); ?>
         </form>
         
-        <!-- Existing Add-Ons Table -->
-        <!-- Table HTML here... -->
+        <!-- Display Data in a Table -->
+        <h2>Add-Ons List</h2>
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Add-On Name</th>
+                    <th scope="col">Value (Percentage)</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach( $addons as $addon ) : ?>
+                    <tr>
+                        <td><?php echo $addon->id; ?></td>
+                        <td><?php echo esc_html( $addon->addon_name ); ?></td>
+                        <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
+                        <td>
+                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
+                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
     <?php
 }
