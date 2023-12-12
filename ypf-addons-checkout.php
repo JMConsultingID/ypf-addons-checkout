@@ -34,6 +34,19 @@ function ypf_addons_create_table() {
     dbDelta( $sql );
 }
 
+// Define constants for paths used in the plugin
+define( 'YPF_ADDONS_CHECKOUT_PATH', plugin_dir_path( __FILE__ ) );
+define( 'YPF_ADDONS_CHECKOUT_URL', plugin_dir_url( __FILE__ ) );
+
+// Include the Elementor widget class file
+function ypf_addons_checkout_include_widgets() {
+    if ( did_action( 'elementor/loaded' ) ) {
+        require_once( YPF_ADDONS_CHECKOUT_PATH . 'includes/class-ypf-addons-checkout-elementor.php' );
+    }
+}
+add_action( 'plugins_loaded', 'ypf_addons_checkout_include_widgets' );
+
+
 add_action( 'admin_menu', 'ypf_addons_checkout_menu' );
 
 function ypf_addons_checkout_menu() {

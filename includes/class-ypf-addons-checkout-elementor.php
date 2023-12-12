@@ -21,7 +21,7 @@ class YPF_Addons_Checkout_Elementor {
 
     public function register_widgets() {
         // Its is now safe to include Widget files
-        require_once( 'ypf-addons-checkout-widget.php' );
+        require_once( 'widgets/ypf-addons-checkout-widget.php' );
         
         // Register the widget
         \Elementor\Plugin::instance()->widgets_manager->register( new \YPF_Addons_Checkout_Widget() );
