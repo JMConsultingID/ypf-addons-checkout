@@ -21,8 +21,9 @@ class YPF_Addons_Checkout_Core {
             $total = $cart->cart_contents_total; // Get the total
             $addon_fee = ($total * $addon_percentage) / 100; // Calculate the percentage fee
 
-            // Append " - Add-On Fee" to the add-on name and add the fee to the cart
-            $fee_name = sprintf(__('%s - Add-On Fee', 'ypf-addons-checkout'), $addon_name);
+            // Append " - Add-On Fee" and the percentage to the add-on name and add the fee to the cart
+            $display_percentage = (intval($addon_percentage) == floatval($addon_percentage)) ? intval($addon_percentage) : floatval($addon_percentage);
+            $fee_name = sprintf(__('%s (+%s%%) - Add-On Fee', 'ypf-addons-checkout'), $addon_name, $display_percentage);
             $cart->add_fee($fee_name, $addon_fee, true);
         }
     }
