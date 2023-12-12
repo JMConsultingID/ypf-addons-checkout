@@ -104,6 +104,18 @@ function ypf_addons_list_page(){
         }
     }
 
+    // Check if in delete mode and handle deletion
+    if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+        $addon_id = intval($_GET['id']);
+
+        // Perform deletion
+        $wpdb->delete(YPF_ADDONS_TABLE_NAME, array('id' => $addon_id));
+
+        // Redirect back to the Add-Ons List page
+        wp_redirect(admin_url('admin.php?page=ypf-addons-list'));
+        exit;
+    }
+
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $submitted_addon_name = sanitize_text_field($_POST['addon_name']);
