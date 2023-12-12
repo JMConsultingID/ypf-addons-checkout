@@ -146,7 +146,7 @@ function ypf_addons_list_page(){
     // HTML Form
     ?>
     <div class="wrap">
-        <h1><?php echo $is_editing ? 'Edit Add-On' : 'Add New Add-On'; ?></h1>
+        <h1><?php echo $edit ? 'Edit Add-On' : 'Add New Add-On'; ?></h1>
         <form method="post" action="">
             <style>
                 .ypf-form-table { width: 100%; }
@@ -168,7 +168,7 @@ function ypf_addons_list_page(){
                         <input type="number" id="value_percentage" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" step="0.01" min="0" max="100" />
                     </td>
                     <td>
-                        <?php submit_button($is_editing ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
+                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
                     </td>
                 </tr>
             </table>
