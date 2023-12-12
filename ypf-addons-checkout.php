@@ -1,11 +1,10 @@
 <?php
 /**
  * Plugin Name: YPF Addons Checkout
- * Plugin URI: https://example.com/ypf-addons-checkout/
+ * Plugin URI: https://yourpropfirm.com/
  * Description: Adds custom add-ons fees and calculations to WooCommerce checkout using Elementor widgets.
  * Version: 1.0.1
  * Author: Ardi
- * Author URI: https://example.com/
  * License: GPLv2 or later
  * Text Domain: ypf-addons-checkout
  */
