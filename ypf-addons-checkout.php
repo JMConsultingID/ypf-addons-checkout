@@ -146,26 +146,20 @@ function ypf_addons_list_page(){
     // HTML Form
     ?>
     <div class="wrap">
-        <h1><?php echo $edit ? 'Edit Add-On' : 'Add New Add-On'; ?></h1>
+         <h1><?php echo $edit ? 'Edit' : 'Add New'; ?> Add-On</h1>
         <form method="post" action="">
-            <style>
-                .ypf-form-table { width: 100%; }
-                .ypf-form-table td { padding: 0; vertical-align: top; }
-                .ypf-form-table input[type=text],
-                .ypf-form-table input[type=number],
-                .ypf-form-table select { width: 100%; }
-                .ypf-form-table .button { width: auto; }
-                .ypf-form-table label { display: block; margin-bottom: 4px; }
-            </style>
-            <table class="ypf-form-table">
+            <table class="form-table">
+                <tr>
+                    <th scope="row">Add-On Name:</th>
+                    <th scope="row">Value (Percentage):</th>
+                    <th scope="row"></th> <!-- Empty for the button -->
+                </tr>
                 <tr>
                     <td>
-                        <label for="addon_name">Add-On Name:</label>
-                        <input type="text" id="addon_name" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" />
+                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" />
                     </td>
                     <td>
-                        <label for="value_percentage">Value (Percentage):</label>
-                        <input type="number" id="value_percentage" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" step="0.01" min="0" max="100" />
+                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" />
                     </td>
                     <td>
                         <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
