@@ -47,7 +47,6 @@ function ypf_addons_checkout_include_widgets() {
 }
 add_action( 'plugins_loaded', 'ypf_addons_checkout_include_widgets' );
 
-
 add_action( 'admin_menu', 'ypf_addons_checkout_menu' );
 
 function ypf_addons_checkout_menu() {
@@ -241,4 +240,22 @@ function ypf_addons_checkout_settings_section_cb() {
 function ypf_addons_checkout_enable_cb() {
     $option = get_option( 'ypf_addons_checkout_enabled' );
     echo '<input type="checkbox" id="ypf_addons_checkout_enabled" name="ypf_addons_checkout_enabled" value="1" ' . checked( 1, $option, false ) . '/>';
+}
+
+function ypf_addons_enqueue_scripts() {
+    wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'assets/js/ypf_addons.js', array('jquery'), null, true);
+    wp_localize_script('ypf-addons-script', 'ypf_addons_ajax', array('ajax_url' => admin_url('admin-ajax.php')));
+}
+add_action('wp_enqueue_scripts', 'ypf_addons_enqueue_scripts');
+
+// Hook for the AJAX action
+add_action('wp_ajax_update_selected_addon', 'ypf_addons_update_selected_addon');
+add_action('wp_ajax_nopriv_update_selected_addon', 'ypf_addons_update_selected_addon'); // If needed for non-logged in users
+
+function ypf_addons_update_selected_addon() {
+    if (isset($_POST['addon_id']) && isset($_POST['addon_percentage'])) {
+        WC()->session->set('chosen_addon', sanitize_text_field($_POST['addon_id']));
+        WC()->session->set('chosen_addon_percentage', floatval($_POST['addon_percentage']));
+    }
+    wp_send_json_success(); // Send a success response back to the AJAX script
 }

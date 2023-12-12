@@ -30,7 +30,7 @@ class YPF_Addons_Checkout_Widget extends \Elementor\Widget_Base {
             foreach ( $addons as $addon ) {
                 // Assume each addon has 'id', 'addon_name', and 'value_percentage' properties
                 echo '<label>';
-                echo '<input type="radio" name="ypf_addon" value="' . esc_attr( $addon->id ) . '"> ';
+                echo '<input type="radio" name="ypf_addon" value="' . esc_attr( $addon->id ) . '" data-value="' . $addon->value_percentage. '" ';
                 echo esc_html( $addon->addon_name );
                 echo '</label><br>';
             }
