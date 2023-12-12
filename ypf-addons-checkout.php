@@ -281,40 +281,33 @@ function ypf_display_addons_after_billing_form() {
         echo '<style>
                 .ypf-addons-default-container {
                     margin-top: 20px;
-                    border: 1px solid #ddd;
-                    padding: 10px;
-                    border-radius: 4px;
-                }
-                .ypf-addons-default-container h3 {
-                    margin-bottom: 15px;
                 }
                 .ypf-addons-default-container > form {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 10px;
-                    justify-content: flex-start;
+                    justify-content: space-between;
                 }
+
                 .ypf-addons-default-container label {
                     display: flex;
                     align-items: center;
                     flex: 1 0 48%; /* Adjust this to change how many items per line, 48% will allow for two with a gap */
                     box-sizing: border-box;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    background-color: #f9f9f9;
                     cursor: pointer;
                     margin-bottom: 0; /* Removes the bottom margin */
                 }
                 .ypf-addons-default-container input[type="radio"] {
                     margin-right: 5px;
                 }
-                /* Ensuring the labels do not break into multiple lines */
-                .ypf-addons-default-container label > span {
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
             </style>';
 
         echo '<div class="ypf-addons-default-container">';
-        echo '<h4>Choose Add-ons</h4>';
+        echo '<h3>Choose Add-ons</h3>';
         echo '<form>';
 
         $chosen_addon_id = null;
