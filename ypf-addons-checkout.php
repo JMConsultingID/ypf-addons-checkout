@@ -278,7 +278,7 @@ function ypf_display_addons_after_billing_form() {
 
     if (!empty($addons)) {
         // CSS for styling the container and labels
-        echo '<style>
+       echo '<style>
                 .ypf-addons-default-container {
                     margin-top: 20px;
                 }
@@ -286,23 +286,25 @@ function ypf_display_addons_after_billing_form() {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 10px;
-                    justify-content: space-between;
                 }
-
                 .ypf-addons-default-container label {
+                    flex: 1;
                     display: flex;
                     align-items: center;
-                    flex: 1 0 48%; /* Adjust this to change how many items per line, 48% will allow for two with a gap */
-                    box-sizing: border-box;
+                    background: #f7f7f7;
+                    border: 1px solid #ccc;
                     padding: 10px;
-                    border: 1px solid #ddd;
                     border-radius: 4px;
-                    background-color: #f9f9f9;
-                    cursor: pointer;
-                    margin-bottom: 0; /* Removes the bottom margin */
+                    margin-bottom: 0; /* Adjust this as needed */
                 }
                 .ypf-addons-default-container input[type="radio"] {
-                    margin-right: 5px;
+                    margin-right: 8px; /* Adjust spacing to the right of the radio button */
+                }
+                /* Adjustments for small screens */
+                @media (max-width: 768px) {
+                    .ypf-addons-default-container label {
+                        flex-basis: 100%;
+                    }
                 }
             </style>';
 
