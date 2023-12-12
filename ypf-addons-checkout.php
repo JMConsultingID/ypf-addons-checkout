@@ -146,37 +146,24 @@ function ypf_addons_list_page(){
     // HTML Form
     ?>
     <div class="wrap">
-        <h1><?php echo $edit ? 'Edit Add-On' : 'Add New Add-On'; ?></h1>
+        <h1><?php echo $edit ? 'Edit' : 'Add New'; ?> Add-On</h1>
         <form method="post" action="">
             <table class="form-table" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
                 <tr>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <strong>Product</strong>
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <strong>Addon</strong>
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <strong>Program ID</strong>
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <!-- Empty cell for the button alignment -->
-                    </td>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Add-On Name:</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Value (Percentage):</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;"></th> <!-- Empty for the button -->
                 </tr>
                 <tr>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;"/>
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" style="width: 100%;"/>
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <!-- Assuming there's a field for Program ID; if not, this should be adjusted -->
-                        <input type="text" name="program_id" value="" style="width: 100%;"/>
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">
-                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false, ['style' => 'width: 100%;']); ?>
-                    </td>
+                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" />
+                    </td style="border: 1px solid #ddd; padding: 8px;">
+                    <td>
+                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" />
+                    </td style="border: 1px solid #ddd; padding: 8px;">
+                    <td>
+                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
+                    </td style="border: 1px solid #ddd; padding: 8px;">
                 </tr>
             </table>
         </form>
