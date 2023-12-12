@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
         }
 
         var addonId = $(this).is(':checked') ? $(this).val() : '';
-        var addonPercentage = $(this).is(':checked') ? $(this).data('percentage') : 0;
+        var addonPercentage = $(this).is(':checked') ? $(this).data('value') : 0;
 
         // AJAX request to update session with the selected add-on or remove it
         $.ajax({
