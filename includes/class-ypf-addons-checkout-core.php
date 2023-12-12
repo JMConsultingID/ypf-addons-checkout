@@ -11,17 +11,27 @@ class YPF_Addons_Checkout_Core {
     public function calculate_addon_fee($cart) {
         if (is_admin() && !defined('DOING_AJAX')) return;
 
-        // This is where you'll get the chosen add-on from the session or POST request
-        // For the sake of this example, let's assume the chosen add-on and its percentage are stored in session
-        $chosen_addon = WC()->session->get('chosen_addon');
+        // Retrieve the chosen add-on ID and percentage from the session
+        $chosen_addon_id = WC()->session->get('chosen_addon');
         $addon_percentage = WC()->session->get('chosen_addon_percentage');
 
-        if (!empty($chosen_addon) && !empty($addon_percentage)) {
+        if (!empty($chosen_addon_id) && !empty($addon_percentage)) {
+            // Retrieve the add-on name from the database
+            $addon_name = $this->get_addon_name_by_id($chosen_addon_id);
             $total = $cart->cart_contents_total; // Get the total
             $addon_fee = ($total * $addon_percentage) / 100; // Calculate the percentage fee
 
-            $cart->add_fee(__('Add-On Fee', 'ypf-addons-checkout'), $addon_fee, true);
+            // Append " - Add-On Fee" to the add-on name and add the fee to the cart
+            $fee_name = sprintf(__('%s - Add-On Fee', 'ypf-addons-checkout'), $addon_name);
+            $cart->add_fee($fee_name, $addon_fee, true);
         }
+    }
+
+    private function get_addon_name_by_id($addon_id) {
+        global $wpdb;
+        // Assume YPF_ADDONS_TABLE_NAME is defined and contains your add-ons
+        $addon = $wpdb->get_row($wpdb->prepare("SELECT addon_name FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id));
+        return $addon ? $addon->addon_name : '';
     }
 }
 
