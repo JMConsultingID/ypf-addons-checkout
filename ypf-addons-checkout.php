@@ -156,14 +156,14 @@ function ypf_addons_list_page(){
                 </tr>
                 <tr>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" />
-                    </td style="border: 1px solid #ddd; padding: 8px;">
-                    <td>
-                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" />
-                    </td style="border: 1px solid #ddd; padding: 8px;">
-                    <td>
+                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;" />
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" style="width: 100%;" />
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
                         <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
-                    </td style="border: 1px solid #ddd; padding: 8px;">
+                    </td>
                 </tr>
             </table>
         </form>
