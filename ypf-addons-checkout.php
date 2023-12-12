@@ -277,6 +277,7 @@ function ypf_display_addons_after_billing_form() {
     $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
 
     if ( ! empty( $addons ) ) {
+        echo '<div class="ypf-addons-default-container">';
         echo '<form>';
         $chosen_addon_id = null;
         if (function_exists('WC') && isset(WC()->session)) {
@@ -292,6 +293,7 @@ function ypf_display_addons_after_billing_form() {
             echo '</label><br>';
         }
         echo '</form>';
+        echo '</div>';
     }
 }
 
