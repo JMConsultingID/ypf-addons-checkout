@@ -286,10 +286,9 @@ function ypf_display_addons_after_billing_form() {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 10px;
-                    justify-content: space-between;
                 }
                 .ypf-addons-default-container label {
-                    flex-basis: 50%;
+                    flex: 1 1 auto;
                     box-sizing: border-box;
                     padding: 10px;
                     border: 1px solid #ddd;
