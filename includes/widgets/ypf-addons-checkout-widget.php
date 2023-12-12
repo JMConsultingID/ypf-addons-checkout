@@ -27,7 +27,10 @@ class YPF_Addons_Checkout_Widget extends \Elementor\Widget_Base {
         $addons = $this->get_addons_data();
         if ( ! empty( $addons ) ) {
             echo '<form>';
-            $chosen_addon_id = WC()->session->get('chosen_addon');
+            $chosen_addon_id = null;
+            if (function_exists('WC') && isset(WC()->session)) {
+                $chosen_addon_id = WC()->session->get('chosen_addon');
+            }
             foreach ( $addons as $addon ) {
                 $is_checked = ($addon->id == $chosen_addon_id) ? 'checked' : '';
                 echo '<label>';
