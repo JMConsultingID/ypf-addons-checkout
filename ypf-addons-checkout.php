@@ -96,7 +96,13 @@ function ypf_addons_checkout_settings_page(){
 }
 
 function ypf_addons_rule_page(){
-
+    ?>
+    <!-- HTML for settings page -->
+    <div class="wrap">
+        <h1>YPF Addons Rule to Connect ProgramID Dashboard</h1>
+        <p>This Feature is Under Development</p>
+    </div>
+    <?php
 }
 
 function ypf_addons_list_page(){
