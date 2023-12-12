@@ -100,7 +100,7 @@ function ypf_addons_rule_page(){
     <!-- HTML for settings page -->
     <div class="wrap">
         <h1>YPF Addons Rule to Connect ProgramID Dashboard</h1>
-        <p>The feature you're trying to access is currently under active development. <br>Our team is working diligently to enhance this functionality to ensure it meets our high standards of performance and user experience. <br>While this feature is not yet available, we are making steady progress and are excited to bring it to you soon. Stay tuned for updates in upcoming releases, <br>and we appreciate your patience and interest in our evolving product. <br>For any inquiries or feedback regarding this feature, please feel free to contact our support team</p>
+        <p>The feature you're trying to access is currently under active development.<br>While this feature is not yet available, we are making steady progress and are excited to bring it to you soon. Stay tuned for updates in upcoming releases, <br>and we appreciate your patience and interest in our evolving product. <br>For any inquiries or feedback regarding this feature, please feel free to contact our support team</p>
     </div>
     <?php
 }
