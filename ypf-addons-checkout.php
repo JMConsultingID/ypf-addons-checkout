@@ -273,6 +273,14 @@ function get_addons_data_default() {
 }
 
 function ypf_display_addons_after_billing_form() {
+    // Get the enabled setting from options
+    $is_enabled = get_option('ypf_addons_checkout_enabled');
+
+    // If the option is not '1', return early
+    if ($is_enabled !== '1') {
+        return;
+    }
+
     // Assuming you have a function to get your add-ons
     $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
 
