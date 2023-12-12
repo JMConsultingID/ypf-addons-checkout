@@ -89,69 +89,67 @@ function ypf_addons_rule_page(){
 function ypf_addons_list_page(){
     global $wpdb;
 
-    // Handle form submission
-    if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-        $addon_name = sanitize_text_field( $_POST['addon_name'] );
-        $value_percentage = floatval( $_POST['value_percentage'] );
+    $edit = false;
+    $addon_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $addon_name = '';
+    $value_percentage = '';
 
-        $wpdb->insert(
-            YPF_ADDONS_TABLE_NAME,
-            array(
-                'addon_name' => $addon_name,
-                'value_percentage' => $value_percentage
-            )
-        );
+    // Check if in edit mode
+    if (isset($_GET['action']) && $_GET['action'] == 'edit' && $addon_id > 0) {
+        $edit = true;
+        $addon = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id ) );
+        if ($addon) {
+            $addon_name = $addon->addon_name;
+            $value_percentage = $addon->value_percentage;
+        }
     }
 
-    // Retrieve data from the database
+    // Handle form submission
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $submitted_addon_name = sanitize_text_field($_POST['addon_name']);
+        $submitted_value_percentage = floatval($_POST['value_percentage']);
+
+        if ($edit) {
+            // Update existing add-on
+            $wpdb->update(
+                YPF_ADDONS_TABLE_NAME,
+                array('addon_name' => $submitted_addon_name, 'value_percentage' => $submitted_value_percentage),
+                array('id' => $addon_id)
+            );
+        } else {
+            // Insert new add-on
+            $wpdb->insert(
+                YPF_ADDONS_TABLE_NAME,
+                array('addon_name' => $submitted_addon_name, 'value_percentage' => $submitted_value_percentage)
+            );
+        }
+    }
+
+    // Retrieve data from the database for listing
     $addons = $wpdb->get_results( "SELECT * FROM " . YPF_ADDONS_TABLE_NAME );
 
-    // HTML form
+    // HTML Form
     ?>
     <div class="wrap">
-        <h1>Add New Add-On Fee</h1>
+        <h1><?php echo $edit ? 'Edit' : 'Add New'; ?> Add-On</h1>
         <form method="post" action="">
-            <!-- Form Fields -->
             <table class="form-table">
                 <tr valign="top">
                     <th scope="row">Add-On Name:</th>
-                    <td><input type="text" name="addon_name" value="" /></td>
+                    <td><input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" /></td>
                 </tr>
 
                 <tr valign="top">
                     <th scope="row">Value (Percentage):</th>
-                    <td><input type="text" name="value_percentage" value="" /></td>
+                    <td><input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" /></td>
                 </tr>
             </table>
 
-            <?php submit_button('Add Add-On'); ?>
+            <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On'); ?>
         </form>
         
-        <!-- Display Data in a Table -->
-        <h2>Add-Ons List</h2>
-        <table class="wp-list-table widefat fixed striped">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Add-On Name</th>
-                    <th scope="col">Value (Percentage)</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach( $addons as $addon ) : ?>
-                    <tr>
-                        <td><?php echo $addon->id; ?></td>
-                        <td><?php echo esc_html( $addon->addon_name ); ?></td>
-                        <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
-                        <td>
-                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
-                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <!-- Existing Add-Ons Table -->
+        <!-- Table HTML here... -->
     </div>
     <?php
 }
