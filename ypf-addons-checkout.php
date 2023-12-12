@@ -42,6 +42,7 @@ define( 'YPF_ADDONS_CHECKOUT_URL', plugin_dir_url( __FILE__ ) );
 function ypf_addons_checkout_include_widgets() {
     if ( did_action( 'elementor/loaded' ) ) {
         require_once( YPF_ADDONS_CHECKOUT_PATH . 'includes/class-ypf-addons-checkout-elementor.php' );
+        require_once( YPF_ADDONS_CHECKOUT_PATH . 'includes/class-ypf-addons-checkout-core.php' );
     }
 }
 add_action( 'plugins_loaded', 'ypf_addons_checkout_include_widgets' );
