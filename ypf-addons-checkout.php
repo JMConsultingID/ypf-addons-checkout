@@ -266,3 +266,30 @@ function ypf_addons_update_selected_addon() {
 
     wp_send_json_success();
 }
+
+function get_addons_data_default() {
+    global $wpdb;
+    return $wpdb->get_results( "SELECT * FROM " . YPF_ADDONS_TABLE_NAME );
+}
+
+function ypf_display_addons_after_billing_form() {
+    // Assuming you have a function to get your add-ons
+    $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
+
+    $chosen_addon_id = null;
+    if (function_exists('WC') && isset(WC()->session)) {
+        $chosen_addon_id = WC()->session->get('chosen_addon');
+    }
+
+    echo '<div class="ypf-addons-container">';
+    foreach ($addons as $addon) {
+        $is_checked = ($addon->id == $chosen_addon_id) ? 'checked' : '';
+        echo '<label>';
+        echo '<input type="radio" name="ypf_addon" value="' . esc_attr($addon->id) . '" ' . $is_checked . '> ';
+        echo esc_html($addon->addon_name);
+        echo '</label><br>';
+    }
+    echo '</div>';
+}
+
+add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
