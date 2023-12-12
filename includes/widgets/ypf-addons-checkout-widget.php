@@ -32,7 +32,7 @@ class YPF_Addons_Checkout_Widget extends \Elementor\Widget_Base {
                 echo '<input type="radio" name="ypf_addon" value="' . esc_attr( $addon->id ) . '" data-value="' . $addon->value_percentage. '">';
                 echo esc_html( $addon->addon_name );
                 $display_percentage = (intval($addon->value_percentage) == floatval($addon->value_percentage)) ? intval($addon->value_percentage) : floatval($addon->value_percentage);
-                echo ' ( +' . esc_html($display_percentage) . '%)';
+                echo ' (+' . esc_html($display_percentage) . '%)';
                 echo '</label><br>';
             }
             echo '</form>';
