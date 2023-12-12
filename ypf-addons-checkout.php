@@ -309,7 +309,7 @@ function ypf_display_addons_after_billing_form() {
             </style>';
 
         echo '<div class="ypf-addons-default-container">';
-        echo '<h4 class="heading">Choose Add-ons</h4>';
+        echo '<h4 class="heading">Choose Addons</h4>';
         echo '<div class="ypf-addons-wrap">';
 
         $chosen_addon_id = null;
