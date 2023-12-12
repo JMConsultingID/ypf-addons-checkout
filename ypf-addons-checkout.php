@@ -282,7 +282,7 @@ function ypf_display_addons_after_billing_form() {
                 .ypf-addons-default-container {
                     margin-top: 20px;
                 }
-                .ypf-addons-default-container > form {
+                .ypf-addons-default-container > div.ypf-addons-wrap{
                     display: flex;
                     flex-wrap: wrap;
                     gap: 10px;
@@ -309,8 +309,8 @@ function ypf_display_addons_after_billing_form() {
             </style>';
 
         echo '<div class="ypf-addons-default-container">';
-        echo '<h3>Choose Add-ons</h3>';
-        echo '<form>';
+        echo '<h4>Choose Add-ons</h4>';
+        echo '<div class="ypf-addons-wrap">';
 
         $chosen_addon_id = null;
         if (function_exists('WC') && isset(WC()->session)) {
@@ -327,7 +327,7 @@ function ypf_display_addons_after_billing_form() {
             echo '</label>';
         }
 
-        echo '</form>';
+        echo '</div>';
         echo '</div>';
     }
 }
