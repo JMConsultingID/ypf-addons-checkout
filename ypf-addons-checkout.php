@@ -306,6 +306,7 @@ function ypf_display_addons_after_billing_form() {
     }
 
     // Assuming you have a function to get your add-ons
+    $addons_title = get_option('ypf_addons_checkout_title'); // Get the title set in the plugin settings
     $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
 
     if (!empty($addons)) {
@@ -341,7 +342,7 @@ function ypf_display_addons_after_billing_form() {
             </style>';
 
         echo '<div class="ypf-addons-default-container">';
-        echo '<h4 class="heading">Choose Addons</h4>';
+        echo '<h4 class="heading ypf-addons-default-title">' . esc_html($addons_title) . '</h4>'; // Output the retrieved title
         echo '<div class="ypf-addons-wrap">';
 
         $chosen_addon_id = null;
@@ -352,7 +353,7 @@ function ypf_display_addons_after_billing_form() {
         foreach ($addons as $addon) {
             $is_checked = ($addon->id == $chosen_addon_id) ? 'checked' : '';
             echo '<label>';
-            echo '<input type="radio" name="ypf_addon" value="' . esc_attr($addon->id) . '" data-value="' . $addon->value_percentage . '" ' . $is_checked . '>';
+            echo '<input type="radio" class="ypf-addons-default-radio-input" name="ypf_addon" value="' . esc_attr($addon->id) . '" data-value="' . $addon->value_percentage . '" ' . $is_checked . '>';
             echo esc_html($addon->addon_name);
             $display_percentage = (intval($addon->value_percentage) == floatval($addon->value_percentage)) ? intval($addon->value_percentage) : floatval($addon->value_percentage);
             echo ' (+' . esc_html($display_percentage) . '%)';
