@@ -276,25 +276,55 @@ function ypf_display_addons_after_billing_form() {
     // Assuming you have a function to get your add-ons
     $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
 
-    if ( ! empty( $addons ) ) {
+    if (!empty($addons)) {
+        // CSS for styling the container and labels
+        echo '<style>
+                .ypf-addons-default-container {
+                    margin-top: 20px;
+                }
+                .ypf-addons-default-container > form {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    justify-content: space-between;
+                }
+                .ypf-addons-default-container label {
+                    flex-basis: 50%;
+                    box-sizing: border-box;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    background-color: #f9f9f9;
+                    cursor: pointer;
+                }
+                .ypf-addons-default-container input[type="radio"] {
+                    margin-right: 5px;
+                }
+            </style>';
+
         echo '<div class="ypf-addons-default-container">';
+        echo '<h3>Choose Add-ons</h3>';
         echo '<form>';
+
         $chosen_addon_id = null;
         if (function_exists('WC') && isset(WC()->session)) {
             $chosen_addon_id = WC()->session->get('chosen_addon');
         }
-        foreach ( $addons as $addon ) {
+
+        foreach ($addons as $addon) {
             $is_checked = ($addon->id == $chosen_addon_id) ? 'checked' : '';
             echo '<label>';
-            echo '<input type="radio" name="ypf_addon" value="' . esc_attr( $addon->id ) . '" data-value="' . $addon->value_percentage. '"' . $is_checked . '>';
-            echo esc_html( $addon->addon_name );
+            echo '<input type="radio" name="ypf_addon" value="' . esc_attr($addon->id) . '" data-value="' . $addon->value_percentage . '" ' . $is_checked . '>';
+            echo esc_html($addon->addon_name);
             $display_percentage = (intval($addon->value_percentage) == floatval($addon->value_percentage)) ? intval($addon->value_percentage) : floatval($addon->value_percentage);
             echo ' (+' . esc_html($display_percentage) . '%)';
-            echo '</label><br>';
+            echo '</label>';
         }
+
         echo '</form>';
         echo '</div>';
     }
 }
+
 
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
