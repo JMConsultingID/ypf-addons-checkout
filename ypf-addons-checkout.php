@@ -148,15 +148,15 @@ function ypf_addons_list_page(){
     <div class="wrap">
         <h1><?php echo $edit ? 'Edit' : 'Add New'; ?> Add-On</h1>
         <form method="post" action="">
-            <table class="form-table">
-                <tr valign="top">
-                    <th scope="row">Add-On Name:</th>
-                    <td><input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" /></td>
+            <table class="form-table" style="border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 10px; border: none;"><label for="addon_name">Add-On Name:</label></td>
+                    <td style="padding: 10px; border: none;"><input type="text" id="addon_name" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" /></td>
                 </tr>
 
-                <tr valign="top">
-                    <th scope="row">Value (Percentage):</th>
-                    <td><input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" /></td>
+                <tr>
+                    <td style="padding: 10px; border: none;"><label for="value_percentage">Value (Percentage):</label></td>
+                    <td style="padding: 10px; border: none;"><input type="text" id="value_percentage" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" /></td>
                 </tr>
             </table>
 
