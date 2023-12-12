@@ -216,6 +216,7 @@ add_action( 'admin_init', 'ypf_addons_checkout_settings_init' );
 
 function ypf_addons_checkout_settings_init() {
     register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_enabled' );
+    register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_title' ); 
 
     add_settings_section(
         'ypf_addons_checkout_settings_section',
@@ -231,15 +232,38 @@ function ypf_addons_checkout_settings_init() {
         'ypf-addons-checkout-settings',
         'ypf_addons_checkout_settings_section'
     );
+
+    add_settings_field(
+        'ypf_addons_checkout_enable',
+        'Enable YPF Addons Checkout',
+        'ypf_addons_checkout_enable_cb',
+        'ypf-addons-checkout-settings',
+        'ypf_addons_checkout_settings_section'
+    );
+
+    // Add a new field for the title of the add-ons
+    add_settings_field(
+        'ypf_addons_checkout_title',
+        'Add-Ons Title',
+        'ypf_addons_checkout_title_cb',
+        'ypf-addons-checkout-settings',
+        'ypf_addons_checkout_settings_section'
+    );
 }
 
 function ypf_addons_checkout_settings_section_cb() {
-    echo '<p>Enable or Disable the YPF Addons Checkout.</p>';
+    echo '<p>Configure the settings for YPF Addons Checkout.</p>';
 }
 
 function ypf_addons_checkout_enable_cb() {
     $option = get_option( 'ypf_addons_checkout_enabled' );
     echo '<input type="checkbox" id="ypf_addons_checkout_enabled" name="ypf_addons_checkout_enabled" value="1" ' . checked( 1, $option, false ) . '/>';
+}
+
+// Callback function for the add-ons title field
+function ypf_addons_checkout_title_cb() {
+    $title = get_option('ypf_addons_checkout_title');
+    echo '<input type="text" id="ypf_addons_checkout_title" name="ypf_addons_checkout_title" value="' . esc_attr($title) . '" />';
 }
 
 function ypf_addons_enqueue_scripts() {
