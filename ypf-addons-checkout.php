@@ -123,6 +123,9 @@ function ypf_addons_list_page(){
                 array('addon_name' => $submitted_addon_name, 'value_percentage' => $submitted_value_percentage)
             );
         }
+        // Redirect back to the Add-Ons List page
+        wp_redirect(admin_url('admin.php?page=ypf-addons-list'));
+        exit;
     }
 
     // Retrieve data from the database for listing
