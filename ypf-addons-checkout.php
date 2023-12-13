@@ -386,8 +386,10 @@ function custom_update_order_meta_with_price_checkout( $order, $data ) {
         $product_id = $item->get_product_id();
         $product = wc_get_product( $product_id );
         $price = $product->get_price();
+        $program_id = $product->get_meta( '_program_id' );
 
         // Update the order meta with price
         $order->update_meta_data( 'product_price', $price );
+        $order->update_meta_data( 'prog_id', $program_id );
     }
 }
