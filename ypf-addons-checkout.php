@@ -379,6 +379,7 @@ function ypf_display_addons_after_billing_form() {
 
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
+
 add_action( 'woocommerce_new_order', 'custom_update_order_meta_with_price', 10, 1 );
 
 function custom_update_order_meta_with_price( $order_id ) {
@@ -395,6 +396,21 @@ function custom_update_order_meta_with_price( $order_id ) {
         $price = $product->get_price();
 
         // Update the order meta with price
-        update_post_meta( $order_id, 'product_price', $price );
+        update_post_meta( $order_id, 'product_price', '111' );
+    }
+}
+
+add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_with_price', 10, 2 );
+
+function custom_update_order_meta_with_price( $order, $data ) {
+    $items = $order->get_items();
+
+    foreach ( $items as $item ) {
+        $product_id = $item->get_product_id();
+        $product = wc_get_product( $product_id );
+        $price = $product->get_price();
+
+        // Update the order meta with price
+        $order->update_meta_data( 'product_price', '222' );
     }
 }
