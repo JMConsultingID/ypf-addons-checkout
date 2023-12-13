@@ -377,19 +377,32 @@ function ypf_display_addons_after_billing_form() {
 }
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
-add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_with_price_checkout', 10, 2 );
+add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_based_on_addon', 10, 2 );
 
-function custom_update_order_meta_with_price_checkout( $order, $data ) {
+function custom_update_order_meta_based_on_addon( $order, $data ) {
     $items = $order->get_items();
+    $addon_product_id = 342; // The ID of the add-on product
+    $has_addon = false;
+
+    // Check if the add-on product is in the order
+    foreach ( $items as $item ) {
+        if ( $item->get_product_id() == $addon_product_id ) {
+            $has_addon = true;
+            break;
+        }
+    }
 
     foreach ( $items as $item ) {
         $product_id = $item->get_product_id();
         $product = wc_get_product( $product_id );
-        $price = $product->get_price();
-        $program_id = $product->get_meta( '_program_id' );
 
-        // Update the order meta with price
-        $order->update_meta_data( 'product_price', $price );
-        $order->update_meta_data( 'prog_id', $program_id );
+        if ( $product_id != $addon_product_id ) {
+            // If the add-on is in the order, use '_program_id_unlimited', otherwise use '_program_id'
+            $program_id_key = $has_addon ? '_program_id_unlimited' : '_program_id';
+            $program_id = $product->get_meta( $program_id_key );
+
+            // Update the order meta
+            $order->update_meta_data( 'prog_id', $program_id );
+        }
     }
 }
