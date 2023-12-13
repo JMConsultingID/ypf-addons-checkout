@@ -375,26 +375,19 @@ function ypf_display_addons_after_billing_form() {
         echo '</div>';
     }
 }
-
-
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
+add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_with_price_checkout', 10, 2 );
 
-add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_with_program_id', 10, 2 );
-
-function custom_update_order_meta_with_program_id( $order, $data ) {
+function custom_update_order_meta_with_price_checkout( $order, $data ) {
     $items = $order->get_items();
-    
+
     foreach ( $items as $item ) {
         $product_id = $item->get_product_id();
         $product = wc_get_product( $product_id );
+        $price = $product->get_price();
 
-        // Get the '_program_id' meta data from the product
-        $program_id = $product->get_meta( '_program_id' );
-
-        if ( ! empty( $program_id ) ) {
-            // Update the order meta with '_program_id'
-            $order->update_meta_data( '_program_id', $program_id );
-        }
+        // Update the order meta with price
+        $order->update_meta_data( 'product_price', $price );
     }
 }
