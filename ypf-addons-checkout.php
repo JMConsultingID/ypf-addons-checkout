@@ -400,9 +400,9 @@ function custom_update_order_meta_with_price( $order_id ) {
     }
 }
 
-add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_with_price', 10, 2 );
+add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_with_price_checkout', 10, 2 );
 
-function custom_update_order_meta_with_price( $order, $data ) {
+function custom_update_order_meta_with_price_checkout( $order, $data ) {
     $items = $order->get_items();
 
     foreach ( $items as $item ) {
