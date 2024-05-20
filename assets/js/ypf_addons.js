@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
     // Store the last selected radio button
-    var lastChecked = null;
+    var lastChecked = $('input[type="radio"][name="ypf_addon"]:checked')[0];
 
     $('input[type="radio"][name="ypf_addon"]').on('click', function() {
         if (this === lastChecked) {

@@ -389,14 +389,16 @@ function ypf_display_addons_after_billing_form() {
             $chosen_addon_id = WC()->session->get('chosen_addon');
         }
 
+        $isFirst = true; // Untuk menandai item pertama
         foreach ($addons as $addon) {
-            $is_checked = ($addon->id == $chosen_addon_id) ? 'checked' : '';
+            $is_checked = ($addon->id == $chosen_addon_id || $isFirst) ? 'checked' : '';
             echo '<label>';
             echo '<input type="radio" class="ypf-addons-default-radio-input" name="ypf_addon" value="' . esc_attr($addon->id) . '" data-value="' . $addon->value_percentage . '" ' . $is_checked . '>';
             echo esc_html($addon->addon_name);
             $display_percentage = (intval($addon->value_percentage) == floatval($addon->value_percentage)) ? intval($addon->value_percentage) : floatval($addon->value_percentage);
             echo ' (+' . esc_html($display_percentage) . '%)';
             echo '</label>';
+            $isFirst = false; // Setelah item pertama, setel ini ke false
         }
 
         echo '</div>';
@@ -405,32 +407,28 @@ function ypf_display_addons_after_billing_form() {
 }
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
-add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_based_on_addon', 10, 2 );
+// add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_based_on_addon', 10, 2 );
 
-function custom_update_order_meta_based_on_addon( $order, $data ) {
-    $items = $order->get_items();
-    $addon_product_id = 342; // The ID of the add-on product
-    $has_addon = false;
+// function custom_update_order_meta_based_on_addon( $order, $data ) {
+//     $items = $order->get_items();
+//     $addon_product_id = 342;
+//     $has_addon = false;
 
-    // Check if the add-on product is in the order
-    foreach ( $items as $item ) {
-        if ( $item->get_product_id() == $addon_product_id ) {
-            $has_addon = true;
-            break;
-        }
-    }
+//     foreach ( $items as $item ) {
+//         if ( $item->get_product_id() == $addon_product_id ) {
+//             $has_addon = true;
+//             break;
+//         }
+//     }
 
-    foreach ( $items as $item ) {
-        $product_id = $item->get_product_id();
-        $product = wc_get_product( $product_id );
+//     foreach ( $items as $item ) {
+//         $product_id = $item->get_product_id();
+//         $product = wc_get_product( $product_id );
 
-        if ( $product_id != $addon_product_id ) {
-            // If the add-on is in the order, use '_program_id_unlimited', otherwise use '_program_id'
-            $program_id_key = $has_addon ? '_program_id_unlimited' : '_program_id';
-            $program_id = $product->get_meta( $program_id_key );
-
-            // Update the order meta
-            $order->update_meta_data( 'prog_id', $program_id );
-        }
-    }
-}
+//         if ( $product_id != $addon_product_id ) {
+//             $program_id_key = $has_addon ? '_program_id_unlimited' : '_program_id';
+//             $program_id = $product->get_meta( $program_id_key );
+//             $order->update_meta_data( 'prog_id', $program_id );
+//         }
+//     }
+// }
