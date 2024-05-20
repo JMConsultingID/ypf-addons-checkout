@@ -89,8 +89,8 @@ function ypf_addons_checkout_menu() {
 
     add_submenu_page(
         'woocommerce',
-        'Add-Ons List',
-        'Add-Ons List',
+        'YPF Add-Ons List',
+        'YPF Add-Ons List',
         'manage_options',
         'ypf-addons-list',
         'ypf_addons_list_page'
