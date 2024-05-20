@@ -88,7 +88,7 @@ function ypf_addons_checkout_menu() {
     );
 
     add_submenu_page(
-        'ypf-addons-product-settings',
+        'woocommerce',
         'Add-Ons List',
         'Add-Ons List',
         'manage_options',
