@@ -24,17 +24,12 @@ jQuery(document).ready(function($) {
     }
 
     $('input[type="radio"][name="ypf_addon"]').on('click', function() {
-        if (this === lastChecked) {
-            $(this).prop('checked', false);
-            lastChecked = null;
-        } else {
-            lastChecked = this;
-        }
+        lastChecked = this;
 
-        var addonId = $(this).is(':checked') ? $(this).val() : '';
-        var addonPercentage = $(this).is(':checked') ? $(this).data('value') : 0;
+        var addonId = $(this).val();
+        var addonPercentage = $(this).data('value');
 
-        // AJAX request to update session with the selected add-on or remove it
+        // AJAX request to update session with the selected add-on
         $.ajax({
             type: 'POST',
             url: ypf_addons_ajax.ajax_url,
