@@ -249,21 +249,14 @@ add_action( 'admin_init', 'ypf_addons_checkout_settings_init' );
 
 function ypf_addons_checkout_settings_init() {
     register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_enabled' );
-    register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_title' ); 
+    register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_title' );
+    register_setting( 'ypf-addons-checkout-settings', 'ypf_addons_checkout_default_id' );
 
     add_settings_section(
         'ypf_addons_checkout_settings_section',
         'YPF Addons Checkout Settings',
         'ypf_addons_checkout_settings_section_cb',
         'ypf-addons-checkout-settings'
-    );
-
-    add_settings_field(
-        'ypf_addons_checkout_enable',
-        'Enable YPF Addons Checkout',
-        'ypf_addons_checkout_enable_cb',
-        'ypf-addons-checkout-settings',
-        'ypf_addons_checkout_settings_section'
     );
 
     add_settings_field(
