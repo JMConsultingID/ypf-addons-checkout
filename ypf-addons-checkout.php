@@ -229,7 +229,7 @@ function ypf_addons_list_page(){
                 <?php $i=1; ?>
                 <?php foreach( $addons as $addon ) : ?>
                     <tr>
-                        <td><?php echo $i; ?></td>
+                        <td><?php echo esc_html( $addon->id ); ?></td>
                         <td><?php echo esc_html( $addon->addon_name ); ?></td>
                         <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
                         <td>
@@ -418,7 +418,7 @@ function save_chosen_addon_to_order_meta($order, $data) {
 // Display the chosen add-on in the order admin panel
 add_action('woocommerce_admin_order_data_after_billing_address', 'display_chosen_addon_in_admin_order_meta', 10, 1);
 function display_chosen_addon_in_admin_order_meta($order) {
-    $chosen_addon_id = $order->get_meta('_ypf_addon');
+    $chosen_addon_id = $order->get_meta('ypf_chosen_addon');
     if ($chosen_addon_id) {
         echo '<p><strong>' . __('Chosen Add-on') . ':</strong> ' . esc_html($chosen_addon_id) . '</p>';
     }
