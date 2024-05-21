@@ -418,9 +418,12 @@ function save_chosen_addon_to_order_meta($order, $data) {
 // Display the chosen add-on in the order admin panel
 add_action('woocommerce_admin_order_data_after_billing_address', 'display_chosen_addon_in_admin_order_meta', 10, 1);
 function display_chosen_addon_in_admin_order_meta($order) {
-    $chosen_addon_id = $order->get_meta('ypf_chosen_addon');
-    if ($chosen_addon_id) {
-        echo '<p><strong>' . __('Chosen Add-on') . ':</strong> ' . esc_html($chosen_addon_id) . '</p>';
+    $multi_currency_enabled = get_option('fyfx_your_propfirm_plugin_enable_multi_currency');
+    if ($multi_currency_enabled === 'enable') {  
+        $chosen_addon_id = $order->get_meta('ypf_chosen_addon');
+        if ($chosen_addon_id) {
+            echo '<p><strong>' . __('Chosen Add-on') . ':</strong> ' . esc_html($chosen_addon_id) . '</p>';
+        }
     }
 }
 
