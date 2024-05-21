@@ -407,6 +407,24 @@ function ypf_display_addons_after_billing_form() {
 }
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
+// Hook to save the chosen add-on to order meta
+add_action('woocommerce_checkout_create_order', 'save_chosen_addon_to_order_meta', 10, 2);
+function save_chosen_addon_to_order_meta($order, $data) {
+    if (isset($_POST['ypf_addon']) && !empty($_POST['ypf_addon'])) {
+        $order->update_meta_data('ypf_chosen_addon', sanitize_text_field($_POST['ypf_addon']));
+    }
+}
+
+// Display the chosen add-on in the order admin panel
+add_action('woocommerce_admin_order_data_after_billing_address', 'display_chosen_addon_in_admin_order_meta', 10, 1);
+function display_chosen_addon_in_admin_order_meta($order) {
+    $chosen_addon_id = $order->get_meta('_ypf_addon');
+    if ($chosen_addon_id) {
+        echo '<p><strong>' . __('Chosen Add-on') . ':</strong> ' . esc_html($chosen_addon_id) . '</p>';
+    }
+}
+
+
 // add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_based_on_addon', 10, 2 );
 
 // function custom_update_order_meta_based_on_addon( $order, $data ) {
