@@ -282,6 +282,15 @@ function ypf_addons_checkout_settings_init() {
         'ypf-addons-checkout-settings',
         'ypf_addons_checkout_settings_section'
     );
+
+    // Add a Default Addons ID 
+    add_settings_field(
+        'ypf_addons_checkout_default_id',
+        'Default Add-Ons id',
+        'ypf_addons_checkout_default_id_cb',
+        'ypf-addons-checkout-settings',
+        'ypf_addons_checkout_settings_section'
+    );
 }
 
 function ypf_addons_checkout_settings_section_cb() {
@@ -298,6 +307,13 @@ function ypf_addons_checkout_title_cb() {
     $title = get_option('ypf_addons_checkout_title');
     echo '<input type="text" id="ypf_addons_checkout_title" name="ypf_addons_checkout_title" value="' . esc_attr($title) . '" />';
 }
+
+// Callback function for the add-ons title field
+function ypf_addons_checkout_default_id_cb() {
+    $addons_default_id = get_option('ypf_addons_checkout_default_id');
+    echo '<input type="text" id="ypf_addons_checkout_default_id" name="ypf_addons_checkout_default_id" value="' . esc_attr($addons_default_id) . '" />';
+}
+
 
 function ypf_addons_enqueue_scripts() {
     wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'assets/js/ypf_addons.js', array('jquery'), null, true);
