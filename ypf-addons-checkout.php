@@ -436,6 +436,25 @@ function display_chosen_addon_in_admin_order_meta($order) {
     }
 }
 
+add_action('woocommerce_product_options_pricing', 'add_exclude_from_ypf_addon_checkbox');
+function add_exclude_from_ypf_addon_checkbox() {
+    woocommerce_wp_checkbox(
+        array(
+            'id'            => '_exclude_from_ypf_addon',
+            'wrapper_class' => '',
+            'label'         => __('Exclude from YPF Add-on', 'woocommerce'),
+            'description'   => __('Check this box to exclude this product from YPF add-ons.', 'woocommerce')
+        )
+    );
+}
+
+add_action('woocommerce_process_product_meta', 'save_exclude_from_ypf_addon_checkbox');
+function save_exclude_from_ypf_addon_checkbox($post_id) {
+    $exclude_from_ypf_addon = isset($_POST['_exclude_from_ypf_addon']) ? 'yes' : 'no';
+    update_post_meta($post_id, '_exclude_from_ypf_addon', $exclude_from_ypf_addon);
+}
+
+
 
 // add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_based_on_addon', 10, 2 );
 
