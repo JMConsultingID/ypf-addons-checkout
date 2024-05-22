@@ -393,7 +393,7 @@ function ypf_display_addons_after_billing_form() {
                     align-items: center;
                     background: transparent;
                     border: 1px solid #ccc;
-                    color:#fff;
+                    color:#000000;
                     padding: 10px;
                     border-radius: 4px;
                     margin-bottom: 0; /* Adjust this as needed */
