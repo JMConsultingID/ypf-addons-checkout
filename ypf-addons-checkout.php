@@ -357,6 +357,25 @@ function ypf_display_addons_after_billing_form() {
     $addons_title = get_option('ypf_addons_checkout_title'); // Get the title set in the plugin settings
     $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
 
+    // Get the current products in the cart
+    $cart = WC()->cart->get_cart();
+    $exclude_addons = false;
+
+    foreach ($cart as $cart_item) {
+        $product_id = $cart_item['product_id'];
+        $exclude_from_ypf_addon = get_post_meta($product_id, '_exclude_from_ypf_addon', true);
+
+        if ($exclude_from_ypf_addon === 'yes') {
+            $exclude_addons = true;
+            break;
+        }
+    }
+
+    // If any product is excluded from add-ons, return early
+    if ($exclude_addons) {
+        return;
+    }
+
     if (!empty($addons)) {
         // CSS for styling the container and labels
        echo '<style>
