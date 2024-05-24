@@ -439,6 +439,14 @@ add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_
 // Hook to save the chosen add-on to order meta
 add_action('woocommerce_checkout_create_order', 'save_chosen_addon_to_order_meta', 10, 2);
 function save_chosen_addon_to_order_meta($order, $data) {
+    // Get the enabled setting from options
+    $is_enabled = get_option('ypf_addons_checkout_enabled');
+
+    // If the option is not '1', return early
+    if ($is_enabled !== '1') {
+        return;
+    }
+    
     if (isset($_POST['ypf_addon']) && !empty($_POST['ypf_addon'])) {
         $order->update_meta_data('ypf_chosen_addon', sanitize_text_field($_POST['ypf_addon']));
     }
