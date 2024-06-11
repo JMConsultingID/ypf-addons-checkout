@@ -79,6 +79,15 @@ function ypf_addons_checkout_menu() {
         'ypf-addons-rule',
         'ypf_addons_rule_page'
     );
+
+    add_submenu_page(
+        'ypf-addons-product-settings',
+        'Regenerate Database',
+        'Regenerate Database',
+        'manage_options',
+        'ypf-regenerate-table',
+        'ypf_regenerate_table_page'
+    );
 }
 
 function ypf_addons_checkout_settings_page(){
@@ -105,6 +114,24 @@ function ypf_addons_rule_page(){
         <p>The feature you're trying to access is currently under active development.<br>We are making steady progress and are excited to bring it to you soon. Stay tuned for updates in upcoming releases, <br>and we appreciate your patience and interest in our evolving product. <br>For any inquiries or feedback regarding this feature, please feel free to contact our support team</p>
     </div>
     <?php
+}
+
+function ypf_regenerate_table_page(){
+    ?>
+    <div class="wrap">
+        <h1>YPF Regenerate Table Addons</h1>
+        <form method="post" action="">
+            <input type="hidden" name="ypf_regenerate_table" value="1">
+            <button type="submit" class="button button-primary">Regenerate Database Table</button>
+        </form>
+    </div>
+    <?php
+
+    // Jika form disubmit, panggil fungsi pembuatan ulang tabel
+    if (isset($_POST['ypf_regenerate_table']) && $_POST['ypf_regenerate_table'] == '1') {
+        ypf_addons_create_table();
+        echo '<div class="notice notice-success"><p>Database table regenerated successfully.</p></div>';
+    }
 }
 
 function ypf_addons_list_page(){
