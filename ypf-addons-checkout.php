@@ -140,10 +140,10 @@ function ypf_addons_list_page(){
     $edit = false;
     $addon_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $addon_name = '';
-    $value_percentage = '';
-    $profit_split = '';
-    $withdraw_active_days = '';
-    $withdraw_trading_days = '';
+    $value_percentage = $value_percentage == '' ? 0 : $value_percentage;
+    $profit_split = $profit_split == ''? 0 : $profit_split;
+    $withdraw_active_days = $withdraw_active_days == ''? 0 : $withdraw_active_days;
+    $withdraw_trading_days = $withdraw_trading_days == ''? 0 : $withdraw_trading_days;
 
     // Check if in edit mode
     if (isset($_GET['action']) && $_GET['action'] == 'edit' && $addon_id > 0) {
