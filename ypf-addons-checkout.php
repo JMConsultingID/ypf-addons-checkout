@@ -254,7 +254,7 @@ function ypf_addons_list_page(){
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Add-On Name</th>
-                    <th scope="col">Value (Percentage)</th>                    
+                    <th scope="col">Fee (Percentage)</th>                    
                     <th scope="col">Profit Split:</th>
                     <th scope="col">Withdraw Active Days:</th>
                     <th scope="col">Withdraw Trading Days:</th>
