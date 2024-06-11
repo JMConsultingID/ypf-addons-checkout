@@ -241,9 +241,9 @@ function ypf_addons_list_page(){
                         <td><?php echo esc_html( $addon->id ); ?></td>
                         <td><?php echo esc_html( $addon->addon_name ); ?></td>
                         <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
-                        <td><?php echo esc_html( $addon->profit_split ); ?>%</td>
-                        <td><?php echo esc_html( $addon->withdraw_active_days ); ?>%</td>
-                        <td><?php echo esc_html( $addon->withdraw_trading_days ); ?>%</td>
+                        <td><?php echo esc_html( $addon->profit_split ); ?></td>
+                        <td><?php echo esc_html( $addon->withdraw_active_days ); ?></td>
+                        <td><?php echo esc_html( $addon->withdraw_trading_days ); ?></td>
                         <td>
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
