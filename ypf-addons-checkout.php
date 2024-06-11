@@ -13,34 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-// Add a custom field to WooCommerce product
-function your_propfirm_addon_add_program_id_unlimited_field() {
-    global $woocommerce, $post;
-
-    // Get the product ID
-    $product_id = $post->ID;
-
-    // Display the custom field on the product edit page
-    woocommerce_wp_text_input(
-        array(
-            'id'          => '_program_id_unlimited',
-            'label'       => __('Program Id Unlimited(Your Propfirm)', 'woocommerce'),
-            'placeholder' => __('Enter Program Id Unlimited(Your Propfirm)', 'woocommerce'),
-            'desc_tip'    => true,
-            'description' => __('Enter Program Id Unlimited(Your Propfirm).', 'woocommerce'),
-            'wrapper_class' => 'show_if_simple',
-        )
-    );
-}
-add_action('woocommerce_product_options_general_product_data', 'your_propfirm_addon_add_program_id_unlimited_field', 9);
-
-// Save the custom field value
-function your_propfirm_addon_save_program_id_unlimited_field($product_id) {
-    $program_id = sanitize_text_field($_POST['_program_id_unlimited']);
-    update_post_meta($product_id, '_program_id_unlimited', esc_attr($program_id));
-}
-add_action('woocommerce_process_product_meta', 'your_propfirm_addon_save_program_id_unlimited_field');
-
 global $wpdb;
 define( 'YPF_ADDONS_TABLE_NAME', $wpdb->prefix . 'ypf_addons' );
 
@@ -54,6 +26,9 @@ function ypf_addons_create_table() {
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         addon_name varchar(255) NOT NULL,
         value_percentage decimal(5,2) NOT NULL,
+        profit_split: decimal(5,2) NOT NULL, 
+        withdraw_active_days: decimal(5,2) NOT NULL, 
+        withdraw_trading_days: decimal(5,2) NOT NULL,
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
@@ -481,31 +456,3 @@ function save_exclude_from_ypf_addon_checkbox($post_id) {
     $exclude_from_ypf_addon = isset($_POST['_exclude_from_ypf_addon']) ? 'yes' : 'no';
     update_post_meta($post_id, '_exclude_from_ypf_addon', $exclude_from_ypf_addon);
 }
-
-
-
-// add_action( 'woocommerce_checkout_create_order', 'custom_update_order_meta_based_on_addon', 10, 2 );
-
-// function custom_update_order_meta_based_on_addon( $order, $data ) {
-//     $items = $order->get_items();
-//     $addon_product_id = 342;
-//     $has_addon = false;
-
-//     foreach ( $items as $item ) {
-//         if ( $item->get_product_id() == $addon_product_id ) {
-//             $has_addon = true;
-//             break;
-//         }
-//     }
-
-//     foreach ( $items as $item ) {
-//         $product_id = $item->get_product_id();
-//         $product = wc_get_product( $product_id );
-
-//         if ( $product_id != $addon_product_id ) {
-//             $program_id_key = $has_addon ? '_program_id_unlimited' : '_program_id';
-//             $program_id = $product->get_meta( $program_id_key );
-//             $order->update_meta_data( 'prog_id', $program_id );
-//         }
-//     }
-// }
