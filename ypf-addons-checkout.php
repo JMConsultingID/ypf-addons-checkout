@@ -140,10 +140,10 @@ function ypf_addons_list_page(){
     $edit = false;
     $addon_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $addon_name = '';
-    $value_percentage = $value_percentage == '' ? 0 : $value_percentage;
-    $profit_split = $profit_split == ''? 0 : $profit_split;
-    $withdraw_active_days = $withdraw_active_days == ''? 0 : $withdraw_active_days;
-    $withdraw_trading_days = $withdraw_trading_days == ''? 0 : $withdraw_trading_days;
+    $value_percentage = '';
+    $profit_split = '';
+    $withdraw_active_days = '';
+    $withdraw_trading_days = '';
 
     // Check if in edit mode
     if (isset($_GET['action']) && $_GET['action'] == 'edit' && $addon_id > 0) {
@@ -229,16 +229,16 @@ function ypf_addons_list_page(){
                         <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" style="width: 100%;" />
+                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage ?: '0'); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="profit_split" value="<?php echo esc_attr($profit_split); ?>" style="width: 100%;" />
+                        <input type="text" name="profit_split" value="<?php echo esc_attr($profit_split ?: '0'); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="withdraw_active_days" value="<?php echo esc_attr($withdraw_active_days); ?>" style="width: 100%;" />
+                        <input type="text" name="withdraw_active_days" value="<?php echo esc_attr($withdraw_active_days ?: '0'); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="withdraw_trading_days" value="<?php echo esc_attr($withdraw_trading_days); ?>" style="width: 100%;" />
+                        <input type="text" name="withdraw_trading_days" value="<?php echo esc_attr($withdraw_trading_days ?: '0'); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
