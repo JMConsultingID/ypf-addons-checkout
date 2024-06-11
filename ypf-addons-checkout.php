@@ -218,7 +218,7 @@ function ypf_addons_list_page(){
             <table class="form-table" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
                 <tr>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Add-On Name:</th>
-                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Value (Percentage):</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Fee Add-ons (Percentage):</th>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Profit Split:</th>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Withdraw Active Days:</th>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Withdraw Trading Days:</th>
@@ -254,7 +254,7 @@ function ypf_addons_list_page(){
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Add-On Name</th>
-                    <th scope="col">Fee (Percentage)</th>                    
+                    <th scope="col">Fee Add-ons (Percentage)</th>                    
                     <th scope="col">Profit Split:</th>
                     <th scope="col">Withdraw Active Days:</th>
                     <th scope="col">Withdraw Trading Days:</th>
