@@ -114,6 +114,9 @@ function ypf_addons_list_page(){
     $addon_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $addon_name = '';
     $value_percentage = '';
+    $profit_split = '';
+    $withdraw_active_days = '';
+    $withdraw_trading_days = '';
 
     // Check if in edit mode
     if (isset($_GET['action']) && $_GET['action'] == 'edit' && $addon_id > 0) {
@@ -122,6 +125,9 @@ function ypf_addons_list_page(){
         if ($addon) {
             $addon_name = $addon->addon_name;
             $value_percentage = $addon->value_percentage;
+            $profit_split = $addon->profit_split;
+            $withdraw_active_days = $addon->withdraw_active_days;
+            $withdraw_trading_days = $addon->withdraw_trading_days;
         }
     }
 
@@ -141,19 +147,32 @@ function ypf_addons_list_page(){
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $submitted_addon_name = sanitize_text_field($_POST['addon_name']);
         $submitted_value_percentage = floatval($_POST['value_percentage']);
+        $submitted_profit_split = floatval($_POST['profit_split']);
+        $submitted_withdraw_active_days = floatval($_POST['withdraw_active_days']);
+        $submitted_withdraw_trading_days = floatval($_POST['withdraw_trading_days']);
 
         if ($edit) {
             // Update existing add-on
             $wpdb->update(
                 YPF_ADDONS_TABLE_NAME,
-                array('addon_name' => $submitted_addon_name, 'value_percentage' => $submitted_value_percentage),
+                array('addon_name' => $submitted_addon_name, 
+                      'value_percentage' => $submitted_value_percentage,
+                      'profit_split' => $submitted_profit_split,
+                      'withdraw_active_days' => $submitted_withdraw_active_days,
+                      'withdraw_trading_days' => $submitted_withdraw_trading_days
+                  ),
                 array('id' => $addon_id)
             );
         } else {
             // Insert new add-on
             $wpdb->insert(
                 YPF_ADDONS_TABLE_NAME,
-                array('addon_name' => $submitted_addon_name, 'value_percentage' => $submitted_value_percentage)
+                array('addon_name' => $submitted_addon_name, 
+                      'value_percentage' => $submitted_value_percentage,
+                      'profit_split' => $submitted_profit_split,
+                      'withdraw_active_days' => $submitted_withdraw_active_days,
+                      'withdraw_trading_days' => $submitted_withdraw_trading_days
+                  ),
             );
         }
         // Redirect back to the Add-Ons List page
@@ -173,6 +192,9 @@ function ypf_addons_list_page(){
                 <tr>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Add-On Name:</th>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Value (Percentage):</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Profit Split:</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Withdraw Active Days:</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Withdraw Trading Days:</th>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;"></th> <!-- Empty for the button -->
                 </tr>
                 <tr>
@@ -181,6 +203,15 @@ function ypf_addons_list_page(){
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage); ?>" style="width: 100%;" />
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <input type="text" name="profit_split" value="<?php echo esc_attr($profit_split); ?>" style="width: 100%;" />
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <input type="text" name="withdraw_active_days" value="<?php echo esc_attr($withdraw_active_days); ?>" style="width: 100%;" />
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <input type="text" name="withdraw_trading_days" value="<?php echo esc_attr($withdraw_trading_days); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
@@ -196,7 +227,10 @@ function ypf_addons_list_page(){
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Add-On Name</th>
-                    <th scope="col">Value (Percentage)</th>
+                    <th scope="col">Value (Percentage)</th>                    
+                    <th scope="col">Profit Split:</th>
+                    <th scope="col">Withdraw Active Days:</th>
+                    <th scope="col">Withdraw Trading Days:</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -207,6 +241,9 @@ function ypf_addons_list_page(){
                         <td><?php echo esc_html( $addon->id ); ?></td>
                         <td><?php echo esc_html( $addon->addon_name ); ?></td>
                         <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
+                        <td><?php echo esc_html( $addon->profit_split ); ?>%</td>
+                        <td><?php echo esc_html( $addon->withdraw_active_days ); ?>%</td>
+                        <td><?php echo esc_html( $addon->withdraw_trading_days ); ?>%</td>
                         <td>
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
