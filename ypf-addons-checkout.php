@@ -250,7 +250,7 @@ function ypf_addons_list_page(){
                         <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage ?: '0'); ?>" style="width: 100%;"  <?php echo !$edit ? 'disabled' : ''; ?> />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false, array('disabled' => $edit)); ?>
+                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false, array('disabled' => !$edit)); ?>
                     </td>
                 </tr>
             </table>
