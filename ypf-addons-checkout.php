@@ -18,6 +18,13 @@ define( 'YPF_ADDONS_TABLE_NAME', $wpdb->prefix . 'ypf_addons' );
 
 register_activation_hook( __FILE__, 'ypf_addons_create_table' );
 
+function ypf_addons_delete_table() {
+    global $wpdb;
+    $table_name = YPF_ADDONS_TABLE_NAME;
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    $wpdb->query($sql);
+}
+
 function ypf_addons_create_table() {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
@@ -128,6 +135,7 @@ function ypf_regenerate_table_page(){
 
     // Jika form disubmit, panggil fungsi pembuatan ulang tabel
     if (isset($_POST['ypf_regenerate_table']) && $_POST['ypf_regenerate_table'] == '1') {
+        ypf_addons_delete_table();
         ypf_addons_create_table();
         echo '<div class="notice notice-success"><p>Database table regenerated successfully.</p></div>';
     }
