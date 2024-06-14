@@ -26,9 +26,8 @@ function ypf_addons_create_table() {
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         addon_name varchar(255) NOT NULL,
         value_percentage decimal(5,2) NOT NULL,
-        profit_split decimal(5,2) NOT NULL,
-        withdraw_active_days decimal(5,2) NOT NULL,
-        withdraw_trading_days decimal(5,2) NOT NULL,
+        ypf_parameter varchar(50) NOT NULL,
+        ypf_parameter_value mediumint(9) NOT NULL,
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
