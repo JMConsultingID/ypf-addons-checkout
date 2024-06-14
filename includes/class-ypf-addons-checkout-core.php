@@ -11,19 +11,21 @@ class YPF_Addons_Checkout_Core {
     public function calculate_addon_fee($cart) {
         if (is_admin() && !defined('DOING_AJAX')) return;
 
-        // Retrieve the chosen add-on ID and percentage from the session
-        $chosen_addon_id = WC()->session->get('chosen_addon');
-        $addon_percentage = WC()->session->get('chosen_addon_percentage');
+        // Retrieve the chosen add-ons and their total percentage from the session
+        $chosen_addons = WC()->session->get('chosen_addons', array());
+        $total_addon_percentage = WC()->session->get('chosen_addons_percentage', 0);
 
-        if (!empty($chosen_addon_id) && !empty($addon_percentage)) {
-            // Retrieve the add-on name from the database
-            $addon_name = $this->get_addon_name_by_id($chosen_addon_id);
+        if (!empty($chosen_addons) && !empty($total_addon_percentage)) {
             $total = $cart->cart_contents_total; // Get the total
-            $addon_fee = ($total * $addon_percentage) / 100; // Calculate the percentage fee
+            $addon_fee = ($total * $total_addon_percentage) / 100; // Calculate the percentage fee
 
-            // Append " - Add-On Fee" and the percentage to the add-on name and add the fee to the cart
-            $display_percentage = (intval($addon_percentage) == floatval($addon_percentage)) ? intval($addon_percentage) : floatval($addon_percentage);
-            $fee_name = sprintf(__('%s (+%s%%)', 'ypf-addons-checkout'), $addon_name, $display_percentage);
+            // Construct the fee name from all chosen add-ons
+            $addon_names = array_map([$this, 'get_addon_name_by_id'], $chosen_addons);
+            $addon_names_str = implode(', ', $addon_names);
+            $display_percentage = (intval($total_addon_percentage) == floatval($total_addon_percentage)) ? intval($total_addon_percentage) : floatval($total_addon_percentage);
+            $fee_name = sprintf(__('Add-Ons: %s (+%s%%)', 'ypf-addons-checkout'), $addon_names_str, $display_percentage);
+
+            // Add the fee to the cart
             $cart->add_fee($fee_name, $addon_fee, true);
         }
     }
