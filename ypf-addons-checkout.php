@@ -469,7 +469,7 @@ function ypf_display_addons_after_billing_form() {
 }
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
-// Hook to save the chosen add-on to order meta
+// Hook to save the chosen add-ons to order meta
 add_action('woocommerce_checkout_create_order', 'save_chosen_addons_to_order_meta', 10, 2);
 function save_chosen_addons_to_order_meta($order, $data) {
     // Get the enabled setting from options
@@ -482,6 +482,17 @@ function save_chosen_addons_to_order_meta($order, $data) {
     
     if (isset($_POST['ypf_addons']) && !empty($_POST['ypf_addons'])) {
         $chosen_addons = array_map('sanitize_text_field', $_POST['ypf_addons']);
+        
+        foreach ($chosen_addons as $addon_id) {
+            $addon_data = get_addon_data_by_id($addon_id);
+            if ($addon_data) {
+                $ypf_parameter = $addon_data->ypf_parameter;
+                $ypf_parameter_value = $addon_data->ypf_parameter_value;
+                $order->update_meta_data($ypf_parameter, $ypf_parameter_value);
+            }
+        }
+        
+        // Save chosen addons to order meta for reference
         $order->update_meta_data('ypf_chosen_addons', $chosen_addons);
     }
 }
@@ -491,7 +502,13 @@ add_action('woocommerce_admin_order_data_after_billing_address', 'display_chosen
 function display_chosen_addons_in_admin_order_meta($order) {
     $chosen_addons = $order->get_meta('ypf_chosen_addons');
     if ($chosen_addons) {
-        echo '<p><strong>' . __('Chosen Add-ons') . ':</strong> ' . esc_html(implode(', ', $chosen_addons)) . '</p>';
+        echo '<p><strong>' . __('Chosen Add-ons') . ':</strong></p>';
+        foreach ($chosen_addons as $addon_id) {
+            $addon_data = get_addon_data_by_id($addon_id);
+            if ($addon_data) {
+                echo '<p>' . esc_html($addon_data->ypf_parameter) . ': ' . esc_html($addon_data->ypf_parameter_value) . '</p>';
+            }
+        }
     }
 }
 
@@ -511,4 +528,16 @@ add_action('woocommerce_process_product_meta', 'save_exclude_from_ypf_addon_chec
 function save_exclude_from_ypf_addon_checkbox($post_id) {
     $exclude_from_ypf_addon = isset($_POST['_exclude_from_ypf_addon']) ? 'yes' : 'no';
     update_post_meta($post_id, '_exclude_from_ypf_addon', $exclude_from_ypf_addon);
+}
+
+
+function get_addon_data_by_id($addon_id) {
+    global $wpdb;
+    return $wpdb->get_row($wpdb->prepare("SELECT ypf_parameter, ypf_parameter_value FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id));
+}
+
+function get_addon_name_by_id($addon_id) {
+    global $wpdb;
+    $addon = $wpdb->get_row($wpdb->prepare("SELECT addon_name FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id));
+    return $addon ? $addon->addon_name : '';
 }
