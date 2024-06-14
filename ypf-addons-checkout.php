@@ -88,14 +88,14 @@ function ypf_addons_checkout_menu() {
         'ypf_addons_list_page'
     );
 
-    add_submenu_page(
-        'ypf-addons-product-settings',
-        'Add-Ons Rule',
-        'Add-Ons Rule',
-        'manage_options',
-        'ypf-addons-rule',
-        'ypf_addons_rule_page'
-    );
+    // add_submenu_page(
+    //     'ypf-addons-product-settings',
+    //     'Add-Ons Rule',
+    //     'Add-Ons Rule',
+    //     'manage_options',
+    //     'ypf-addons-rule',
+    //     'ypf_addons_rule_page'
+    // );
 
     add_submenu_page(
         'ypf-addons-product-settings',
