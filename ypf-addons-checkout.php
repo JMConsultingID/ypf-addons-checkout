@@ -69,13 +69,13 @@ add_action( 'admin_menu', 'ypf_addons_checkout_menu' );
 
 function ypf_addons_checkout_menu() {
     add_menu_page( 
-        'YPF Addons', 
-        'YPF Addons', 
+        'YPF Add-Ons', 
+        'YPF Add-Ons', 
         'manage_options', 
         'ypf-addons-product-settings', 
         'ypf_addons_checkout_settings_page', 
         null, 
-        25
+        3
     );
 
     add_submenu_page(
