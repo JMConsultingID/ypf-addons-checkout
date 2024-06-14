@@ -241,7 +241,7 @@ function ypf_addons_list_page(){
                         <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;" <?php echo !$edit ? 'disabled' : ''; ?> />
                     </td>                    
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="ypf_parameter" value="<?php echo esc_attr($ypf_parameter); ?>" style="width: 100%;" disabled/>
+                        <input type="text" name="ypf_parameter" value="<?php echo esc_attr($ypf_parameter); ?>" style="width: 100%;" readonly/>
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <input type="text" name="ypf_parameter_value" value="<?php echo esc_attr($ypf_parameter_value ?: '0'); ?>" style="width: 100%;"  <?php echo !$edit ? 'disabled' : ''; ?>/>
