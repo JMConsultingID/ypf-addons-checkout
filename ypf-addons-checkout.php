@@ -383,12 +383,6 @@ function ypf_display_addons_after_billing_form() {
         return;
     }
 
-    // Unset the session variables related to the add-ons when the page loads
-    if (function_exists('WC') && isset(WC()->session)) {
-        WC()->session->__unset('chosen_addons');
-        WC()->session->__unset('chosen_addons_percentage');
-    }
-
     // Assuming you have a function to get your add-ons
     $addons_title = get_option('ypf_addons_checkout_title'); // Get the title set in the plugin settings
     $addons = get_addons_data_default(); // Replace with your actual function to get add-ons
