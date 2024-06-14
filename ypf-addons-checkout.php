@@ -40,6 +40,16 @@ function ypf_addons_create_table() {
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+    // Insert default data
+    $default_data = [
+        ['addon_name' => '90% profit split', 'ypf_parameter' => 'profitSplit', 'ypf_parameter_value' => 90, 'value_percentage' => 50.00],
+        ['addon_name' => 'Withdraw Active Days', 'ypf_parameter' => 'withdrawActiveDays', 'ypf_parameter_value' => 14, 'value_percentage' => 10.00],
+        ['addon_name' => 'Withdraw Trading Days', 'ypf_parameter' => 'withdrawTradingDays', 'ypf_parameter_value' => 5, 'value_percentage' => 10.00]
+    ];
+
+    foreach ($default_data as $data) {
+        $wpdb->insert($table_name, $data);
+    }
 }
 
 // Define constants for paths used in the plugin
