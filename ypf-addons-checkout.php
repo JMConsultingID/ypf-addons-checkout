@@ -178,7 +178,7 @@ function ypf_addons_list_page(){
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $submitted_addon_name = sanitize_text_field($_POST['addon_name']);        
-        $submitted_ypf_parameter = floatval($_POST['ypf_parameter']);
+        $submitted_ypf_parameter = sanitize_text_field($_POST['ypf_parameter']);
         $submitted_ypf_parameter_value = floatval($_POST['ypf_parameter_value']);
         $submitted_value_percentage = floatval($_POST['value_percentage']);
 
