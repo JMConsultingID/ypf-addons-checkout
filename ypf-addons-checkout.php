@@ -347,26 +347,27 @@ function ypf_addons_enqueue_scripts() {
     wp_enqueue_script('ypf-addons-script', plugin_dir_url(__FILE__) . 'assets/js/ypf_addons.js', array('jquery'), null, true);
     wp_localize_script('ypf-addons-script', 'ypf_addons_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('ypf_addons_nonce') // Nonce for security
+        'nonce' => wp_create_nonce('ypf_addons_nonce')
     ));
 }
 add_action('wp_enqueue_scripts', 'ypf_addons_enqueue_scripts');
 
 // Hook for the AJAX action
-add_action('wp_ajax_update_selected_addon', 'ypf_addons_update_selected_addon');
-add_action('wp_ajax_nopriv_update_selected_addon', 'ypf_addons_update_selected_addon'); // If needed for non-logged in users
+add_action('wp_ajax_update_selected_addons', 'ypf_addons_update_selected_addons');
+add_action('wp_ajax_nopriv_update_selected_addons', 'ypf_addons_update_selected_addons'); // If needed for non-logged in users
 
-function ypf_addons_update_selected_addon() {
+function ypf_addons_update_selected_addons() {
     check_ajax_referer('ypf_addons_nonce', 'nonce'); // Security check
 
-    $addon_id = isset($_POST['addon_id']) ? sanitize_text_field($_POST['addon_id']) : '';
-    $addon_percentage = isset($_POST['addon_percentage']) ? floatval($_POST['addon_percentage']) : 0;
+    $addons = isset($_POST['addons']) ? array_map('sanitize_text_field', $_POST['addons']) : array();
+    $addons_percentage = isset($_POST['addons_percentage']) ? floatval($_POST['addons_percentage']) : 0;
 
-    WC()->session->set('chosen_addon', $addon_id);
-    WC()->session->set('chosen_addon_percentage', $addon_percentage);
+    WC()->session->set('chosen_addons', $addons);
+    WC()->session->set('chosen_addons_percentage', $addons_percentage);
 
     wp_send_json_success();
 }
+
 
 function get_addons_data_default() {
     global $wpdb;
@@ -384,8 +385,8 @@ function ypf_display_addons_after_billing_form() {
 
     // Unset the session variables related to the add-ons when the page loads
     if (function_exists('WC') && isset(WC()->session)) {
-        WC()->session->__unset('chosen_addon');
-        WC()->session->__unset('chosen_addon_percentage');
+        WC()->session->__unset('chosen_addons');
+        WC()->session->__unset('chosen_addons_percentage');
     }
 
     // Assuming you have a function to get your add-ons
@@ -468,10 +469,9 @@ function ypf_display_addons_after_billing_form() {
 }
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
 
-
 // Hook to save the chosen add-on to order meta
-add_action('woocommerce_checkout_create_order', 'save_chosen_addon_to_order_meta', 10, 2);
-function save_chosen_addon_to_order_meta($order, $data) {
+add_action('woocommerce_checkout_create_order', 'save_chosen_addons_to_order_meta', 10, 2);
+function save_chosen_addons_to_order_meta($order, $data) {
     // Get the enabled setting from options
     $is_enabled = get_option('ypf_addons_checkout_enabled');
 
@@ -480,20 +480,18 @@ function save_chosen_addon_to_order_meta($order, $data) {
         return;
     }
     
-    if (isset($_POST['ypf_addon']) && !empty($_POST['ypf_addon'])) {
-        $order->update_meta_data('ypf_chosen_addon', sanitize_text_field($_POST['ypf_addon']));
+    if (isset($_POST['ypf_addons']) && !empty($_POST['ypf_addons'])) {
+        $chosen_addons = array_map('sanitize_text_field', $_POST['ypf_addons']);
+        $order->update_meta_data('ypf_chosen_addons', $chosen_addons);
     }
 }
 
-// Display the chosen add-on in the order admin panel
-add_action('woocommerce_admin_order_data_after_billing_address', 'display_chosen_addon_in_admin_order_meta', 10, 1);
-function display_chosen_addon_in_admin_order_meta($order) {
-    $multi_currency_enabled = get_option('fyfx_your_propfirm_plugin_enable_multi_currency');
-    if ($multi_currency_enabled === 'enable') {  
-        $chosen_addon_id = $order->get_meta('ypf_chosen_addon');
-        if ($chosen_addon_id) {
-            echo '<p><strong>' . __('Chosen Add-on') . ':</strong> ' . esc_html($chosen_addon_id) . '</p>';
-        }
+// Display the chosen add-ons in the order admin panel
+add_action('woocommerce_admin_order_data_after_billing_address', 'display_chosen_addons_in_admin_order_meta', 10, 1);
+function display_chosen_addons_in_admin_order_meta($order) {
+    $chosen_addons = $order->get_meta('ypf_chosen_addons');
+    if ($chosen_addons) {
+        echo '<p><strong>' . __('Chosen Add-ons') . ':</strong> ' . esc_html(implode(', ', $chosen_addons)) . '</p>';
     }
 }
 
