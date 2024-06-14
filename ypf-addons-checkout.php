@@ -28,6 +28,7 @@ function ypf_addons_delete_table() {
 function ypf_addons_create_table() {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
+    $table_name = YPF_ADDONS_TABLE_NAME;
 
     $sql = "CREATE TABLE " . YPF_ADDONS_TABLE_NAME . " (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
