@@ -413,7 +413,7 @@ function ypf_display_addons_after_billing_form() {
 
     if (!empty($addons)) {
         // CSS for styling the container and labels
-       echo '<style>
+        echo '<style>
                 .ypf-addons-default-container {
                     margin-top: 20px;
                 }
@@ -433,8 +433,8 @@ function ypf_display_addons_after_billing_form() {
                     border-radius: 4px;
                     margin-bottom: 0; /* Adjust this as needed */
                 }
-                .ypf-addons-default-container input[type="radio"] {
-                    margin-right: 8px; /* Adjust spacing to the right of the radio button */
+                .ypf-addons-default-container input[type="checkbox"] {
+                    margin-right: 8px; /* Adjust spacing to the right of the checkbox */
                 }
                 /* Adjustments for small screens */
                 @media (max-width: 768px) {
@@ -448,21 +448,18 @@ function ypf_display_addons_after_billing_form() {
         echo '<h4 class="heading ypf-addons-default-title">' . esc_html($addons_title) . '</h4>'; // Output the retrieved title
         echo '<div class="ypf-addons-wrap">';
 
-        $chosen_addon_id = null;
         if (function_exists('WC') && isset(WC()->session)) {
-            $chosen_addon_id = WC()->session->get('chosen_addon');
+            $chosen_addons = WC()->session->get('chosen_addons', array());
         }
 
-        $isFirst = true; // Untuk menandai item pertama
         foreach ($addons as $addon) {
-            $is_checked = ($addon->id == $chosen_addon_id || $isFirst) ? 'checked' : '';
+            $is_checked = in_array($addon->id, $chosen_addons) ? 'checked' : '';
             echo '<label>';
-            echo '<input type="radio" class="ypf-addons-default-radio-input" name="ypf_addon" value="' . esc_attr($addon->id) . '" data-value="' . $addon->value_percentage . '" ' . $is_checked . '>';
+            echo '<input type="checkbox" class="ypf-addons-default-checkbox-input" name="ypf_addons[]" value="' . esc_attr($addon->id) . '" data-value="' . $addon->value_percentage . '" ' . $is_checked . '>';
             echo esc_html($addon->addon_name);
             $display_percentage = (intval($addon->value_percentage) == floatval($addon->value_percentage)) ? intval($addon->value_percentage) : floatval($addon->value_percentage);
             echo ' (+' . esc_html($display_percentage) . '%)';
             echo '</label>';
-            $isFirst = false; // Setelah item pertama, setel ini ke false
         }
 
         echo '</div>';
@@ -470,6 +467,7 @@ function ypf_display_addons_after_billing_form() {
     }
 }
 add_action('woocommerce_after_checkout_billing_form', 'ypf_display_addons_after_billing_form');
+
 
 // Hook to save the chosen add-on to order meta
 add_action('woocommerce_checkout_create_order', 'save_chosen_addon_to_order_meta', 10, 2);
