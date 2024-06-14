@@ -15,26 +15,25 @@ class YPF_Addons_Checkout_Core {
         $chosen_addons = WC()->session->get('chosen_addons', array());
         $total_addon_percentage = WC()->session->get('chosen_addons_percentage', 0);
 
-        if (!empty($chosen_addons) && !empty($total_addon_percentage)) {
+        if (!empty($chosen_addons)) {
             $total = $cart->cart_contents_total; // Get the total
-            $addon_fee = ($total * $total_addon_percentage) / 100; // Calculate the percentage fee
 
-            // Construct the fee name from all chosen add-ons
-            $addon_names = array_map([$this, 'get_addon_name_by_id'], $chosen_addons);
-            $addon_names_str = implode(', ', $addon_names);
-            $display_percentage = (intval($total_addon_percentage) == floatval($total_addon_percentage)) ? intval($total_addon_percentage) : floatval($total_addon_percentage);
-            $fee_name = sprintf(__('Add-Ons: %s (+%s%%)', 'ypf-addons-checkout'), $addon_names_str, $display_percentage);
-
-            // Add the fee to the cart
-            $cart->add_fee($fee_name, $addon_fee, true);
+            foreach ($chosen_addons as $addon_id) {
+                $addon = $this->get_addon_by_id($addon_id);
+                if ($addon) {
+                    $addon_fee = ($total * $addon->value_percentage) / 100; // Calculate the percentage fee
+                    $display_percentage = (intval($addon->value_percentage) == floatval($addon->value_percentage)) ? intval($addon->value_percentage) : floatval($addon->value_percentage);
+                    $fee_name = sprintf(__('%s (+%s%%)', 'ypf-addons-checkout'), $addon->addon_name, $display_percentage);
+                    $cart->add_fee($fee_name, $addon_fee, true);
+                }
+            }
         }
     }
 
-    private function get_addon_name_by_id($addon_id) {
+    private function get_addon_by_id($addon_id) {
         global $wpdb;
         // Assume YPF_ADDONS_TABLE_NAME is defined and contains your add-ons
-        $addon = $wpdb->get_row($wpdb->prepare("SELECT addon_name FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id));
-        return $addon ? $addon->addon_name : '';
+        return $wpdb->get_row($wpdb->prepare("SELECT addon_name, value_percentage FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id));
     }
 }
 
