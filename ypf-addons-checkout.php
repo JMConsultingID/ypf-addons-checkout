@@ -74,7 +74,7 @@ function ypf_addons_checkout_menu() {
         'manage_options', 
         'ypf-addons-product-settings', 
         'ypf_addons_checkout_settings_page', 
-        null, 
+        'dashicons-screenoptions', 
         3
     );
 
