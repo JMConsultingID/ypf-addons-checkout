@@ -42,7 +42,7 @@ function ypf_addons_create_table() {
     dbDelta( $sql );
     // Insert default data
     $default_data = [
-        ['addon_name' => '90% profit split', 'ypf_parameter' => 'profitSplit', 'ypf_parameter_value' => 90, 'value_percentage' => 50.00],
+        ['addon_name' => '90% profit split', 'ypf_parameter' => 'profitSplit', 'ypf_parameter_value' => 91, 'value_percentage' => 50.00],
         ['addon_name' => 'Withdraw Active Days', 'ypf_parameter' => 'withdrawActiveDays', 'ypf_parameter_value' => 14, 'value_percentage' => 10.00],
         ['addon_name' => 'Withdraw Trading Days', 'ypf_parameter' => 'withdrawTradingDays', 'ypf_parameter_value' => 5, 'value_percentage' => 10.00]
     ];
