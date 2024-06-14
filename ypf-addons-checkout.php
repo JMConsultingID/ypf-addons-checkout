@@ -31,10 +31,10 @@ function ypf_addons_create_table() {
 
     $sql = "CREATE TABLE " . YPF_ADDONS_TABLE_NAME . " (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        addon_name varchar(255) NOT NULL,
-        value_percentage decimal(5,2) NOT NULL,
+        addon_name varchar(255) NOT NULL,        
         ypf_parameter varchar(50) NOT NULL,
         ypf_parameter_value mediumint(9) NOT NULL,
+        value_percentage decimal(5,2) NOT NULL,
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
@@ -146,22 +146,20 @@ function ypf_addons_list_page(){
 
     $edit = false;
     $addon_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-    $addon_name = '';
+    $addon_name = '';    
+    $ypf_parameter = '';
+    $ypf_parameter_value = '';
     $value_percentage = '';
-    $profit_split = '';
-    $withdraw_active_days = '';
-    $withdraw_trading_days = '';
 
     // Check if in edit mode
     if (isset($_GET['action']) && $_GET['action'] == 'edit' && $addon_id > 0) {
         $edit = true;
         $addon = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . YPF_ADDONS_TABLE_NAME . " WHERE id = %d", $addon_id ) );
         if ($addon) {
-            $addon_name = $addon->addon_name;
+            $addon_name = $addon->addon_name;            
+            $ypf_parameter = $addon->ypf_parameter;
+            $ypf_parameter_value = $addon->ypf_parameter_value;
             $value_percentage = $addon->value_percentage;
-            $profit_split = $addon->profit_split;
-            $withdraw_active_days = $addon->withdraw_active_days;
-            $withdraw_trading_days = $addon->withdraw_trading_days;
         }
     }
 
@@ -179,21 +177,19 @@ function ypf_addons_list_page(){
 
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $submitted_addon_name = sanitize_text_field($_POST['addon_name']);
+        $submitted_addon_name = sanitize_text_field($_POST['addon_name']);        
+        $submitted_ypf_parameter = floatval($_POST['ypf_parameter']);
+        $submitted_ypf_parameter_value = floatval($_POST['ypf_parameter_value']);
         $submitted_value_percentage = floatval($_POST['value_percentage']);
-        $submitted_profit_split = floatval($_POST['profit_split']);
-        $submitted_withdraw_active_days = floatval($_POST['withdraw_active_days']);
-        $submitted_withdraw_trading_days = floatval($_POST['withdraw_trading_days']);
 
         if ($edit) {
             // Update existing add-on
             $wpdb->update(
                 YPF_ADDONS_TABLE_NAME,
-                array('addon_name' => $submitted_addon_name, 
-                      'value_percentage' => $submitted_value_percentage,
-                      'profit_split' => $submitted_profit_split,
-                      'withdraw_active_days' => $submitted_withdraw_active_days,
-                      'withdraw_trading_days' => $submitted_withdraw_trading_days
+                array('addon_name' => $submitted_addon_name,                      
+                      'ypf_parameter' => $submitted_ypf_parameter,
+                      'ypf_parameter_value' => $submitted_ypf_parameter_value,
+                      'value_percentage' => $submitted_value_percentage
                   ),
                 array('id' => $addon_id)
             );
@@ -202,10 +198,9 @@ function ypf_addons_list_page(){
             $wpdb->insert(
                 YPF_ADDONS_TABLE_NAME,
                 array('addon_name' => $submitted_addon_name, 
-                      'value_percentage' => $submitted_value_percentage,
-                      'profit_split' => $submitted_profit_split,
-                      'withdraw_active_days' => $submitted_withdraw_active_days,
-                      'withdraw_trading_days' => $submitted_withdraw_trading_days
+                      'ypf_parameter' => $submitted_ypf_parameter,
+                      'ypf_parameter_value' => $submitted_ypf_parameter_value,
+                      'value_percentage' => $submitted_value_percentage
                   ),
             );
         }
@@ -224,28 +219,24 @@ function ypf_addons_list_page(){
         <form method="post" action="">
             <table class="form-table" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
                 <tr>
-                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Add-On Name:</th>
-                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Fee Add-ons (Percentage):</th>
-                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Profit Split:</th>
-                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Withdraw Active Days:</th>
-                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Withdraw Trading Days:</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Add-On Name:</th>                    
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Addon Parameter:</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Addon Parameter Value:</th>
+                    <th scope="row" style="border: 1px solid #ddd; padding: 8px;">Woocommerce Fee Add-ons (Percentage):</th>
                     <th scope="row" style="border: 1px solid #ddd; padding: 8px;"></th> <!-- Empty for the button -->
                 </tr>
                 <tr>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;" />
+                    </td>                    
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <input type="text" name="ypf_parameter" value="<?php echo esc_attr($ypf_parameter); ?>" style="width: 100%;" />
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <input type="text" name="ypf_parameter_value" value="<?php echo esc_attr($ypf_parameter_value ?: '0'); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage ?: '0'); ?>" style="width: 100%;" />
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="profit_split" value="<?php echo esc_attr($profit_split ?: '0'); ?>" style="width: 100%;" />
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="withdraw_active_days" value="<?php echo esc_attr($withdraw_active_days ?: '0'); ?>" style="width: 100%;" />
-                    </td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="withdraw_trading_days" value="<?php echo esc_attr($withdraw_trading_days ?: '0'); ?>" style="width: 100%;" />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
@@ -261,10 +252,9 @@ function ypf_addons_list_page(){
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Add-On Name</th>
-                    <th scope="col">Fee Add-ons (Percentage)</th>                    
-                    <th scope="col">Profit Split</th>
-                    <th scope="col">Withdraw Active Days</th>
-                    <th scope="col">Withdraw Trading Days</th>
+                    <th scope="col">Addon Parameter</th>
+                    <th scope="col">Addon Parameter Value</th>
+                    <th scope="col">Woocommerce Fee Add-ons (Percentage)</th> 
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -273,11 +263,10 @@ function ypf_addons_list_page(){
                 <?php foreach( $addons as $addon ) : ?>
                     <tr>
                         <td><?php echo esc_html( $addon->id ); ?></td>
-                        <td><?php echo esc_html( $addon->addon_name ); ?></td>
+                        <td><?php echo esc_html( $addon->addon_name ); ?></td>                        
+                        <td><?php echo esc_html( $addon->ypf_parameter ); ?></td>
+                        <td><?php echo esc_html( $addon->ypf_parameter_value ); ?></td>
                         <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
-                        <td><?php echo esc_html( $addon->profit_split ); ?></td>
-                        <td><?php echo esc_html( $addon->withdraw_active_days ); ?></td>
-                        <td><?php echo esc_html( $addon->withdraw_trading_days ); ?></td>
                         <td>
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
