@@ -279,7 +279,8 @@ function ypf_addons_list_page(){
                         <td><?php echo esc_html( $addon->ypf_parameter_value ); ?></td>
                         <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
                         <td>
-                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
+                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a>
+                            <!-- |  -->
                             <!-- <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a> -->
                         </td>
                     </tr>
