@@ -238,19 +238,19 @@ function ypf_addons_list_page(){
                 </tr>
                 <tr>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;" />
+                        <input type="text" name="addon_name" value="<?php echo esc_attr($addon_name); ?>" style="width: 100%;" <?php echo $edit ? 'disabled' : ''; ?> />
                     </td>                    
                     <td style="border: 1px solid #ddd; padding: 8px;">
                         <input type="text" name="ypf_parameter" value="<?php echo esc_attr($ypf_parameter); ?>" style="width: 100%;" disabled/>
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="ypf_parameter_value" value="<?php echo esc_attr($ypf_parameter_value ?: '0'); ?>" style="width: 100%;" />
+                        <input type="text" name="ypf_parameter_value" value="<?php echo esc_attr($ypf_parameter_value ?: '0'); ?>" style="width: 100%;"  <?php echo $edit ? 'disabled' : ''; ?>/>
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage ?: '0'); ?>" style="width: 100%;" />
+                        <input type="text" name="value_percentage" value="<?php echo esc_attr($value_percentage ?: '0'); ?>" style="width: 100%;"  <?php echo $edit ? 'disabled' : ''; ?> />
                     </td>
                     <td style="border: 1px solid #ddd; padding: 8px;">
-                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false); ?>
+                        <?php submit_button($edit ? 'Update Add-On' : 'Add Add-On', 'primary', 'submit', false, array('disabled' => !$edit)); ?>
                     </td>
                 </tr>
             </table>
@@ -280,7 +280,7 @@ function ypf_addons_list_page(){
                         <td><?php echo esc_html( $addon->value_percentage ); ?>%</td>
                         <td>
                             <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=edit&id=' . $addon->id ); ?>">Edit</a> | 
-                            <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                            <!-- <a href="<?php echo admin_url( 'admin.php?page=ypf-addons-list&action=delete&id=' . $addon->id ); ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a> -->
                         </td>
                     </tr>
                     <?php $i++; ?>
