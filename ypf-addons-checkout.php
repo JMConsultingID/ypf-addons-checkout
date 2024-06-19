@@ -44,8 +44,8 @@ function ypf_addons_create_table() {
     // Insert default data
     $default_data = [
         ['addon_name' => '90% profit split', 'ypf_parameter' => 'profitSplit', 'ypf_parameter_value' => 90, 'value_percentage' => 50.00],
-        ['addon_name' => 'Withdraw Active Days', 'ypf_parameter' => 'withdrawActiveDays', 'ypf_parameter_value' => 14, 'value_percentage' => 10.00],
-        ['addon_name' => 'Withdraw Trading Days', 'ypf_parameter' => 'withdrawTradingDays', 'ypf_parameter_value' => 5, 'value_percentage' => 10.00]
+        ['addon_name' => 'Withdraw Active Days', 'ypf_parameter' => 'withdrawActiveDays', 'ypf_parameter_value' => 0, 'value_percentage' => 10.00],
+        ['addon_name' => 'Withdraw Trading Days', 'ypf_parameter' => 'withdrawTradingDays', 'ypf_parameter_value' => 0, 'value_percentage' => 10.00]
     ];
 
     foreach ($default_data as $data) {
@@ -525,23 +525,23 @@ function display_chosen_addons_in_admin_order_meta($order) {
     }
 }
 
-add_action('woocommerce_product_options_pricing', 'add_exclude_from_ypf_addon_checkbox');
-function add_exclude_from_ypf_addon_checkbox() {
-    woocommerce_wp_checkbox(
-        array(
-            'id'            => '_exclude_from_ypf_addon',
-            'wrapper_class' => '',
-            'label'         => __('Exclude from YPF Add-on', 'woocommerce'),
-            'description'   => __('Check this box to exclude this product from YPF add-ons.', 'woocommerce')
-        )
-    );
-}
+// add_action('woocommerce_product_options_pricing', 'add_exclude_from_ypf_addon_checkbox');
+// function add_exclude_from_ypf_addon_checkbox() {
+//     woocommerce_wp_checkbox(
+//         array(
+//             'id'            => '_exclude_from_ypf_addon',
+//             'wrapper_class' => '',
+//             'label'         => __('Exclude from YPF Add-on', 'woocommerce'),
+//             'description'   => __('Check this box to exclude this product from YPF add-ons.', 'woocommerce')
+//         )
+//     );
+// }
 
-add_action('woocommerce_process_product_meta', 'save_exclude_from_ypf_addon_checkbox');
-function save_exclude_from_ypf_addon_checkbox($post_id) {
-    $exclude_from_ypf_addon = isset($_POST['_exclude_from_ypf_addon']) ? 'yes' : 'no';
-    update_post_meta($post_id, '_exclude_from_ypf_addon', $exclude_from_ypf_addon);
-}
+// add_action('woocommerce_process_product_meta', 'save_exclude_from_ypf_addon_checkbox');
+// function save_exclude_from_ypf_addon_checkbox($post_id) {
+//     $exclude_from_ypf_addon = isset($_POST['_exclude_from_ypf_addon']) ? 'yes' : 'no';
+//     update_post_meta($post_id, '_exclude_from_ypf_addon', $exclude_from_ypf_addon);
+// }
 
 
 function get_addon_data_by_id($addon_id) {
