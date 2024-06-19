@@ -71,7 +71,7 @@ add_action( 'admin_menu', 'ypf_addons_checkout_menu' );
 function ypf_addons_checkout_menu() {
     add_menu_page( 
         'YPF Add-Ons', 
-        'YPF Add-On Settings', 
+        'YPF Add-Ons', 
         'manage_options', 
         'ypf-addons-product-settings', 
         'ypf_addons_checkout_settings_page', 
